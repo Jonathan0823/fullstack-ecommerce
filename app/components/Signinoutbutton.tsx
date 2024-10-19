@@ -5,9 +5,17 @@ import React from "react";
 const Signinoutbutton = () => {
   const { data: session } = useSession();
   console.log(session);
+
+
   const handleSignOut = async () => {
     await signOut();
   };
+
+  const handleSignIn = async () => {
+    window.location.href = "/login";
+  };
+
+  
 
   return (
     <div>
@@ -16,7 +24,7 @@ const Signinoutbutton = () => {
         {session ? (
           <button onClick={handleSignOut}>sign out</button>
         ) : (
-          <button>sign in</button>
+          <button onClick={handleSignIn}>sign in</button>
         )}
       </div>
     </div>
