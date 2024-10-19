@@ -18,8 +18,13 @@ export function RegisterForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const handleSubmit = async () => {
+    if (password !== confirmPassword) {
+      alert("Passwords do not match");
+      return;
+    }
     try {
         const res = await fetch(`${BACKEND_URL}/auth/register`, {
             method: "POST",
@@ -46,6 +51,7 @@ export function RegisterForm() {
       setName("");
       setEmail("");
       setPassword("");
+      setConfirmPassword("");
     }
   };
 
@@ -94,6 +100,16 @@ export function RegisterForm() {
               required
               onChange={(e) => setPassword(e.target.value)}
               value={password}
+            />
+          </div>
+          <div className="grid gap-2">
+            <Label htmlFor="email">Confirm Password</Label>
+            <Input
+              id="confirm-password"
+              type="password"
+              required
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              value={confirmPassword}
             />
           </div>
           <Button type="submit" className="w-full" onClick={handleSubmit}>
