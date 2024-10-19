@@ -1,30 +1,37 @@
 import { BACKEND_URL } from "@/lib/constant";
 import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import axios from 'axios';
 
 export const authOptions: NextAuthOptions = {
+    pages: {
+        signIn: "/login",
+
+    },
     providers: [
         CredentialsProvider({
             name: 'Credentials',
             credentials: {
-                username: { label: "Username", type: "text" },
-                password: { label: "Password", type: "password" }
+                email: { label: "Email", type: "email"},
+                password: { label: "Password", type: "password"}
             },
             async authorize(credentials) {
-                if (!credentials?.username || !credentials?.password) {
+                if (!credentials?.email || !credentials?.password) {
                     return null;
                 }
-                const { username, password } = credentials;
+                const { email, password } = credentials;
                 try {
-                    const res = await axios.post(`${BACKEND_URL}/auth/login`, { username, password });
-                    if (res.status === 200) {
-                        return res.data;
-                    }
-                    if (res.status === 401) {
-                        console.log(res.statusText);
+                    const res = await fetch(`${BACKEND_URL}/auth/login`, {
+                        method: "POST",
+                        body: JSON.stringify({ email, password }),
+                        headers: {
+                            "Content-Type": "application/json"
+                        }
+                    });
+                    if (!res.ok) {
                         return null;
                     }
+                    const user = await res.json();
+                    return user;
                 } catch (error) {
                     console.error(error);
                     return null;
