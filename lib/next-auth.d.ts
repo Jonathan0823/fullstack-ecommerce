@@ -9,9 +9,10 @@ declare module "next-auth" {
             createdAt: string;
             updatedAt: string;
         },
-        backendtoken: {
+        backendTokens: {
             accessToken: string;
             refreshToken: string;
+            expiresIn: number;
         }
     }
 }
@@ -27,9 +28,10 @@ declare module "next-auth/jwt" {
             createdAt: string;
             updatedAt: string;
         };
-        backendtoken: {
+        backendTokens: {
             accessToken: string;
             refreshToken: string;
+            expiresIn: number;
         };
     }
 }
