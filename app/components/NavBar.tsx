@@ -17,6 +17,7 @@ import {
 } from '@headlessui/react'
 import { Bars3Icon, MagnifyingGlassIcon, ShoppingBagIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import Signinoutbutton from './Signinoutbutton'
+import Image from 'next/image'
 
 
 const navigation = {    
@@ -262,12 +263,14 @@ export default function Example() {
 
               {/* Logo */}
               <div className="ml-4 flex lg:ml-0">
-                <a href="#">
+                <a href="/">
                   <span className="sr-only">Your Company</span>
-                  <img
+                  <Image
                     alt=""
-                    src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=600"
-                    className="h-8 w-auto"
+                    src="/images/logo.png"
+                    className="h-10 w-auto"
+                    width={64}
+                    height={64}
                   />
                 </a>
               </div>

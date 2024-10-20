@@ -1,18 +1,18 @@
 "use client";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { signOut, useSession } from "next-auth/react";
+import Image from "next/image";
 import React from "react";
 
-
 const userNavigation = [
-  { name: "Your Profile", href: "#" },
+  { name: "Your Profile", href: "/dashboard" },
   { name: "Settings", href: "#" },
 ];
 
 const Signinoutbutton = () => {
   const { data: session } = useSession();
   console.log(session);
-  const {user} = session || {};
+  const { user } = session || {};
 
   const handleSignOut = async () => {
     await signOut();
@@ -22,14 +22,15 @@ const Signinoutbutton = () => {
     window.location.href = "/login";
   };
 
+  const userImage = user?.image || "/images/defaultProfile.svg";
   return (
     <div>
       <Menu as="div" className="relative ml-3">
         <div>
-          <MenuButton className="relative flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+          <MenuButton className="relative flex max-w-xs items-center rounded-full bg-gray-300 text-sm ">
             <span className="absolute -inset-1.5" />
             <span className="sr-only">Open user menu</span>
-            <img alt="" src={user?.image} className="h-8 w-8 rounded-full" />
+            <Image width={60} height={60} alt="" src={userImage} className="h-8 w-8 rounded-full" />
           </MenuButton>
         </div>
         <MenuItems
@@ -47,10 +48,11 @@ const Signinoutbutton = () => {
             </MenuItem>
           ))}
           <MenuItem>
-            <button className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100"
-            onClick={session ? handleSignOut : handleSignIn}>
-              {session ? "Sign out" : "Sign in"}
-            </button>
+            <div className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
+              <button onClick={session ? handleSignOut : handleSignIn}>
+                {session ? "Sign out" : "Sign in"}
+              </button>
+            </div>
           </MenuItem>
         </MenuItems>
       </Menu>
