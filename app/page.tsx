@@ -1,9 +1,11 @@
-import Signinoutbutton from "./components/Signinoutbutton";
+import CategoryFilter from "./components/CategoryFilter";
+import NavBar from "./components/NavBar";
 
 export default function Home() {
   return (
     <div>
-      <Signinoutbutton />
+      <NavBar />
+      <CategoryFilter />
     </div>
   );
 }

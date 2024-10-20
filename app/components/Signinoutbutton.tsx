@@ -19,12 +19,11 @@ const Signinoutbutton = () => {
 
   return (
     <div>
-        <p>Hello {session?.user.name}</p>
       <div>
         {session ? (
-          <button onClick={handleSignOut}>sign out</button>
+          <button onClick={handleSignOut}>Sign Out</button>
         ) : (
-          <button onClick={handleSignIn}>sign in</button>
+          <button onClick={handleSignIn}>Sign In</button>
         )}
       </div>
     </div>
