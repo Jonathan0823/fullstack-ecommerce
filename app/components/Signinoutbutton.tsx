@@ -23,6 +23,7 @@ const Signinoutbutton = () => {
   };
 
   const userImage = user?.image || "/images/defaultProfile.svg";
+  console.log(session);
   return (
     <div>
       <Menu as="div" className="relative ml-3">
