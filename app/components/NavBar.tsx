@@ -18,6 +18,7 @@ import {
 import { Bars3Icon, MagnifyingGlassIcon, ShoppingBagIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import Signinoutbutton from './Signinoutbutton'
 
+
 const navigation = {    
   categories: [
     {
@@ -147,20 +148,20 @@ export default function Example() {
   const [open, setOpen] = useState(false)
 
   return (
-    <div className="bg-white">
+    <div className="bg-white z-50">
       {/* Mobile menu */}
-      <Dialog open={open} onClose={setOpen} className="relative z-40 lg:hidden">
+      <Dialog open={open} onClose={setOpen} className="relative z-50 lg:hidden">
         <DialogBackdrop
           transition
-          className="fixed inset-0 bg-black bg-opacity-25 transition-opacity duration-300 ease-linear data-[closed]:opacity-0"
+          className="fixed inset-0 bg-black bg-opacity-25 transition-opacity duration-300 ease-linear data-[closed]:opacity-0 z-50"
         />
 
-        <div className="fixed inset-0 z-40 flex">
+        <div className="fixed inset-0 z-50 flex">
           <DialogPanel
             transition
             className="relative flex w-full max-w-xs transform flex-col overflow-y-auto bg-white pb-12 shadow-xl transition duration-300 ease-in-out data-[closed]:-translate-x-full"
           >
-            <div className="flex px-4 pb-2 pt-5">
+            <div className="flex px-4 pb-2 pt-5 z-50">
               <button
                 type="button"
                 onClick={() => setOpen(false)}
@@ -174,7 +175,7 @@ export default function Example() {
 
             {/* Links */}
             <TabGroup className="mt-2">
-              <div className="border-b border-gray-200">
+              <div className="border-b border-gray-200 z-50">
                 <TabList className="-mb-px flex space-x-8 px-4">
                   {navigation.categories.map((category) => (
                     <Tab
@@ -189,14 +190,14 @@ export default function Example() {
               <TabPanels as={Fragment}>
                 {navigation.categories.map((category) => (
                   <TabPanel key={category.name} className="space-y-10 px-4 pb-8 pt-10">
-                    <div className="grid grid-cols-2 gap-x-4">
+                    <div className="grid grid-cols-2 gap-x-4 z-50">
                       {category.featured.map((item) => (
                         <div key={item.name} className="group relative text-sm">
                           <div className="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-100 group-hover:opacity-75">
                             <img alt={item.imageAlt} src={item.imageSrc} className="object-cover object-center" />
                           </div>
                           <a href={item.href} className="mt-6 block font-medium text-gray-900">
-                            <span aria-hidden="true" className="absolute inset-0 z-10" />
+                            <span aria-hidden="true" className="absolute inset-0 z-50" />
                             {item.name}
                           </a>
                           <p aria-hidden="true" className="mt-1">
@@ -206,7 +207,7 @@ export default function Example() {
                       ))}
                     </div>
                     {category.sections.map((section) => (
-                      <div key={section.name}>
+                      <div key={section.name} className='z-50'>
                         <p id={`${category.id}-${section.id}-heading-mobile`} className="font-medium text-gray-900">
                           {section.name}
                         </p>
@@ -277,19 +278,19 @@ export default function Example() {
                   {navigation.categories.map((category) => (
                     <Popover key={category.name} className="flex">
                       <div className="relative flex">
-                        <PopoverButton className="relative z-10 -mb-px flex items-center border-b-2 border-transparent pt-px text-sm font-medium text-gray-700 transition-colors duration-200 ease-out hover:text-gray-800 data-[open]:border-indigo-600 data-[open]:text-indigo-600">
+                        <PopoverButton className="relative z-50 -mb-px flex items-center border-b-2 border-transparent pt-px text-sm font-medium text-gray-700 transition-colors duration-200 ease-out hover:text-gray-800 data-[open]:border-indigo-600 data-[open]:text-indigo-600">
                           {category.name}
                         </PopoverButton>
                       </div>
 
                       <PopoverPanel
                         transition
-                        className="absolute inset-x-0 top-full text-sm text-gray-500 transition data-[closed]:opacity-0 data-[enter]:duration-200 data-[leave]:duration-150 data-[enter]:ease-out data-[leave]:ease-in"
+                        className="absolute inset-x-0 z-50 top-full text-sm text-gray-500 transition data-[closed]:opacity-0 data-[enter]:duration-200 data-[leave]:duration-150 data-[enter]:ease-out data-[leave]:ease-in"
                       >
                         {/* Presentational element used to render the bottom shadow, if we put the shadow on the actual panel it pokes out the top, so we use this shorter element to hide the top of the shadow */}
                         <div aria-hidden="true" className="absolute inset-0 top-1/2 bg-white shadow" />
 
-                        <div className="relative bg-white">
+                        <div className="relative bg-white z-50">
                           <div className="mx-auto max-w-7xl px-8">
                             <div className="grid grid-cols-2 gap-x-8 gap-y-10 py-16">
                               <div className="col-start-2 grid grid-cols-2 gap-x-8">
