@@ -94,7 +94,7 @@ export default function CategoryFilter() {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
 
   return (
-    <div className="bg-white rounded-md flex ">
+    <div className="bg-white rounded-md flex flex-col lg:flex-row ">
       <div>
         {/* Mobile filter dialog */}
         <Dialog open={mobileFiltersOpen} onClose={setMobileFiltersOpen} className="relative z-40 lg:hidden">
@@ -164,8 +164,8 @@ export default function CategoryFilter() {
           </div>
         </Dialog>
 
-        <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-4">
+        <main className="mx-auto min-w-full px-4 sm:px-6 lg:px-8">
+          <div className="flex items-baseline min-w-full justify-between border-b border-gray-200 pb-6 pt-4">
             <h1 className="text-4xl font-bold tracking-tight text-gray-900">New Arrivals</h1>
 
             <div className="flex items-center">
