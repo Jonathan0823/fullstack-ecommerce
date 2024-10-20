@@ -150,7 +150,7 @@ export default function NavBar() {
   const [open, setOpen] = useState(false)
 
   return (
-    <div className="bg-white z-50">
+    <div className="bg-white z-50 min-w-max">
       {/* Mobile menu */}
       <Dialog open={open} onClose={setOpen} className="relative z-50 lg:hidden">
         <DialogBackdrop
