@@ -34,9 +34,8 @@ const page = () => {
   return (
     <div>
       <NavBar />
-      <div className="flex lg:flex-row md:flex-col justify-between flex-col ">
-        <PersonalInfoForm />
-        <div className="flex min-h-max min-w-max flex-col overflow-y-scroll bg-white shadow-xl w-full    lg:w-2/3 xl:w-1/2" >
+      <div className="flex lg:flex-row-reverse md:flex-col justify-between flex-col">
+        <div className="flex min-h-max min-w-max flex-col overflow-y-scroll bg-white shadow-xl w-full lg:w-2/3 xl:w-1/2" >
           <div className="flex-1 overflow-y-auto px-4 py-6 sm:px-6">
             <div className="flex items-start justify-between">
               <p className="text-lg font-medium text-gray-900">Shopping cart</p>
@@ -107,6 +106,7 @@ const page = () => {
             </div>
           </div>
         </div>
+        <PersonalInfoForm />
       </div>
     </div>
   );

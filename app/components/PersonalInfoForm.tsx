@@ -2,7 +2,7 @@ import React from "react";
 
 const PersonalInfoForm = () => {
   return (
-    <div className="w-full flex justify-center px-4 sm:px-6 lg:px-8">
+    <div className="w-full flex justify-center px-4 sm:px-6 lg:px-8 bg-white">
       <form className="mt-4 w-full max-w-3xl flex flex-col space-y-8">
         <div className="space-y-12">
           <div className="border-b border-gray-900/10 pb-12">

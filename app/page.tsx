@@ -3,7 +3,7 @@ import NavBar from "./components/NavBar";
 
 export default function Home() {
   return (
-    <div className="w-max flex-col mx-auto">
+    <div >
       <NavBar />
       <CategoryFilter />
     </div>
