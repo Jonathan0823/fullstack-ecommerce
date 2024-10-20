@@ -146,7 +146,7 @@ const navigation = {
 
 
 
-export default function Example() {
+export default function NavBar() {
   const [open, setOpen] = useState(false)
 
   return (
