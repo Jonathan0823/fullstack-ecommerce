@@ -6,7 +6,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <SidebarProvider defaultOpen={true}>
       <AppSidebar />
       <main>
-        <SidebarTrigger />
+        <SidebarTrigger className="lg:hidden"/>
         {children}
       </main>
     </SidebarProvider>

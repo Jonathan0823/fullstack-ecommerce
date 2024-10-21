@@ -205,7 +205,7 @@ export default function NavBar() {
                   <Image
                     alt=""
                     src="/images/logo.png"
-                    className="h-10 w-auto"
+                    className="lg:h-10 w-auto h-6"
                     width={64}
                     height={64}
                   />
@@ -239,7 +239,7 @@ export default function NavBar() {
                 </div>
 
                 {/* Cart */}
-                <div className="ml-4 flow-root lg:ml-6">
+                <div className="ml-0 flow-root lg:ml-2">
                   <a href="#" className="group -m-2 flex items-center p-2">
             
                     <Cart />
@@ -247,9 +247,7 @@ export default function NavBar() {
                   </a>
                 </div>
                 <div className="flex flex-1 items-center justify-end space-x-6">
-                  <a href="#" className=" text-sm font-medium text-gray-700 ml-6 hover:text-gray-800">
                     <Signinoutbutton />
-                  </a>
                 </div>
               </div>
             </div>

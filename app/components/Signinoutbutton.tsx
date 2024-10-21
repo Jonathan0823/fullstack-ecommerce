@@ -7,7 +7,7 @@ import React from "react";
 
 const userNavigation = [
   { name: "Your Profile", href: "/dashboard" },
-  { name: "Your Orders", href: "/myorders" },
+  { name: "Your Orders", href: "/orders" },
 ];
 
 const Signinoutbutton = () => {
@@ -33,7 +33,7 @@ const Signinoutbutton = () => {
           <MenuButton className="relative flex max-w-xs items-center rounded-full bg-gray-300 text-sm ">
             <span className="absolute -inset-1.5" />
             <span className="sr-only">Open user menu</span>
-            <Image width={60} height={60} alt="" src={userImage} className="h-8 w-8 rounded-full" />
+            <Image width={60} height={60} alt="" src={userImage} className="lg:h-8 lg:w-8 w-9 h-9 rounded-full" />
           </MenuButton>
         </div>
         <MenuItems

@@ -63,12 +63,12 @@ export function AppSidebar() {
           <SidebarGroupContent className="pt-10">
             <SidebarMenu className="gap-3">
               {items.map((item) => (
-                <SidebarMenuItem key={item.title} className="mx-2">
-                  <SidebarMenuButton asChild className={`py-5 ${item.url == path ? 'bg-blue-600 hover:bg-blue-800 text-white hover:text-white rounded-xl' : ''} transition-all ease-in-out`}>
-                    <a href={item.url}>
+                <SidebarMenuItem key={item.title} className="mx-2 ">
+                  <SidebarMenuButton asChild className={`py-5 ${item.url == path ? 'bg-blue-600 hover:bg-blue-800 text-white hover:text-white rounded-xl  ease-soft-spring transition-all duration-300' : ''}`}>
+                    <Link href={item.url}>
                       <item.icon className="scale-125" />
-                      <span className="ml-3 text-xl font-bold">{item.title}</span>
-                    </a>
+                      <span className="ml-3 text-base font-bold">{item.title}</span>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
