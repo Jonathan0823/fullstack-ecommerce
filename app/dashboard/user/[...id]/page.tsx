@@ -13,9 +13,7 @@ const page = async ({params}: {params: {id: string}}) => {
             'Content-Type': 'application/json',
         },
     })
-    console.log(res)
     const user = await res.json()
-    console.log(session)
     const address = JSON.parse(user.address)
     
 

@@ -31,6 +31,7 @@ const products = [
 ];
 
 const page = () => {
+
   return (
     <div>
       <NavBar />

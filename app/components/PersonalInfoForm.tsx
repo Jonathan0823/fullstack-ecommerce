@@ -1,16 +1,61 @@
-import React from "react";
+"use client";
+import { BACKEND_URL } from "@/lib/constant";
+import { useSession } from "next-auth/react";
+import React, { useEffect, useMemo, useState } from "react";
 
 const PersonalInfoForm = () => {
-  return (
-    <div className="w-full flex justify-center px-4 sm:px-6 lg:px-8 bg-white">
-      <form className="mt-4 w-full max-w-3xl flex flex-col space-y-8">
+  const {data: session} = useSession();
+
+  const [firstname, setFirstname] = useState("");
+  const [lastname, setLastname] = useState("");
+  const [email, setEmail] = useState("");
+  const [country, setCountry] = useState("");
+  const [street, setStreet] = useState("");
+  const [city, setCity] = useState("");
+  const [state, setState] = useState("");
+  const [zipCode, setZipCode] = useState("");
+  const [loading, setLoading] = useState(true);
+  
+  useEffect(() => {
+    const fetchUser = async () => {
+      if (session) {
+        try {
+          const res = await fetch(`${BACKEND_URL}/user/${session.user.id}`, {
+            method: 'GET',
+            headers: {
+              authorization: `Bearer ${session.backendTokens.accessToken}`,
+              'Content-Type': 'application/json',
+            },
+          });
+          const data = await res.json();
+          const address = JSON.parse(data?.address || '{}');
+          setFirstname(address.firstname || '');
+          setLastname(address.lastname || '');
+          setEmail(address.emailadd || '');
+          setCountry(address.country || '');
+          setStreet(address.street || '');
+          setCity(address.city || '');
+          setState(address.state || '');
+          setZipCode(address.zipCode || '');
+        } catch (error) {
+          console.error('Error fetching user data:', error);
+        } finally {
+          setLoading(false);
+        }
+      }
+    };
+    fetchUser();
+  }, [session]);
+
+  const formContent = useMemo(() => (
+    <form className="mt-4 w-full max-w-3xl flex flex-col space-y-8">
         <div className="space-y-12">
           <div className="border-b border-gray-900/10 pb-12">
             <h2 className="text-base font-semibold leading-7 text-gray-900">
               Personal Information
             </h2>
             <p className="mt-1 text-sm leading-6 text-gray-600">
-              Use a permanent address where you can receive mail.
+              Provide your personal information to complete your purchase.
             </p>
 
             <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
@@ -25,6 +70,8 @@ const PersonalInfoForm = () => {
                   type="text"
                   name="first-name"
                   id="first-name"
+                  value={firstname}
+                  onChange={(e) => setFirstname(e.target.value)}
                   autoComplete="given-name"
                   className="mt-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                 />
@@ -39,6 +86,8 @@ const PersonalInfoForm = () => {
                 <div className="mt-2">
                   <input
                     id="last-name"
+                    value={lastname}
+                    onChange={(e) => setLastname(e.target.value)}
                     name="last-name"
                     type="text"
                     autoComplete="family-name"
@@ -57,6 +106,8 @@ const PersonalInfoForm = () => {
                 <div className="mt-2">
                   <input
                     id="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     name="email"
                     type="email"
                     autoComplete="email"
@@ -75,6 +126,8 @@ const PersonalInfoForm = () => {
                 <div className="mt-2">
                   <select
                     id="country"
+                    value={country}
+                    onChange={(e) => setCountry(e.target.value)}
                     name="country"
                     autoComplete="country-name"
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
@@ -97,6 +150,8 @@ const PersonalInfoForm = () => {
                   <input
                     id="street-address"
                     name="street-address"
+                    value={street}
+                    onChange={(e) => setStreet(e.target.value)}
                     type="text"
                     autoComplete="street-address"
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -114,6 +169,8 @@ const PersonalInfoForm = () => {
                 <div className="mt-2">
                   <input
                     id="city"
+                    value={city}
+                    onChange={(e) => setCity(e.target.value)}
                     name="city"
                     type="text"
                     autoComplete="address-level2"
@@ -132,6 +189,8 @@ const PersonalInfoForm = () => {
                 <div className="mt-2">
                   <input
                     id="region"
+                    value={state}
+                    onChange={(e) => setState(e.target.value)}
                     name="region"
                     type="text"
                     autoComplete="address-level1"
@@ -150,6 +209,8 @@ const PersonalInfoForm = () => {
                 <div className="mt-2">
                   <input
                     id="postal-code"
+                    value={zipCode}
+                    onChange={(e) => setZipCode(e.target.value)}
                     name="postal-code"
                     type="text"
                     autoComplete="postal-code"
@@ -161,6 +222,12 @@ const PersonalInfoForm = () => {
           </div>
         </div>
       </form>
+
+  ), [firstname, lastname, email, country, street, city, state, zipCode]);
+
+  return (
+    <div className="w-full flex justify-center px-4 sm:px-6 lg:px-8 bg-white">
+      {loading ? <p>Loading...</p> : formContent}
     </div>
   );
 };
