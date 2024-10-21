@@ -37,6 +37,7 @@ declare module "next-auth/jwt" {
                 street: string;
                 zipCode: string;
             }
+            isAdmin: boolean;
             createdAt: string;
             updatedAt: string;
         };
