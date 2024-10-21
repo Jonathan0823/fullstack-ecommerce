@@ -26,7 +26,7 @@ const page = () => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // Perform your form submission logic here
+    
     console.log('Form submitted');
     // After submission, refetch the products
     await getProducts();
