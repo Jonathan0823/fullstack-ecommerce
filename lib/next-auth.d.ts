@@ -27,6 +27,16 @@ declare module "next-auth/jwt" {
             name: string;
             email: string;
             image: string;
+            address:{
+                firstname: string;
+                lastname: string;
+                emailadd: string;
+                country: string;
+                state: string;
+                city: string;
+                street: string;
+                zipCode: string;
+            }
             createdAt: string;
             updatedAt: string;
         };

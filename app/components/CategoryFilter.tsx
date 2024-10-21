@@ -20,6 +20,7 @@ import {
   PlusIcon,
   Squares2X2Icon,
 } from "@heroicons/react/20/solid";
+import Image from "next/image";
 
 interface SortOption {
   name: string;
@@ -2087,9 +2088,11 @@ export default function CategoryFilter() {
                           className="group border shadow-lg rounded-md relative"
                         >
                           <div className="aspect-h-1 aspect-w-1 -z-0 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80">
-                            <img
+                            <Image
                               alt={product.title}
                               src={product.thumbnail}
+                              width={300}
+                              height={350}
                               className="h-full w-full object-cover object-center lg:h-full lg:w-full"
                             />
                           </div>

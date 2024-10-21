@@ -15,10 +15,15 @@ const page = async ({params}: {params: {id: string}}) => {
     })
     console.log(res)
     const user = await res.json()
+    console.log(session)
+    const address = JSON.parse(user.address)
     
 
   return (
-    <div>{user.name}</div>
+    <div>
+      <p>{user.name}</p>
+      <p>{address.state}</p>
+    </div>
   )
 }
 
