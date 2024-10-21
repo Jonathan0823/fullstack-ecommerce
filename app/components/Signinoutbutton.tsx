@@ -7,7 +7,7 @@ import React from "react";
 
 const userNavigation = [
   { name: "Your Profile", href: "/dashboard" },
-  { name: "Settings", href: "#" },
+  { name: "Your Orders", href: "/myorders" },
 ];
 
 const Signinoutbutton = () => {
