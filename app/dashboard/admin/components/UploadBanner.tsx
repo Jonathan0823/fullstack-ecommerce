@@ -72,22 +72,22 @@ const UploadBanner = () => {
         if (!res.ok) {
           throw new Error("Failed to update banner");
         } else setSuccess(true);
-      }
-      const res = await fetch(`${BACKEND_URL}/banners/edit/${banner.id}`, {
-        method: "PUT",
-        headers: {
-          authorization: `Bearer ${session.backendTokens.accessToken}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          image: banner.image,
-          url: link ? link : banner.url,
-        }),
-      });
+      } else {
+        const res = await fetch(`${BACKEND_URL}/banners/edit/${banner.id}`, {
+          method: "PUT",
+          headers: {
+            authorization: `Bearer ${session.backendTokens.accessToken}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            url: link ? link : banner.url,
+          }),
+        });
 
-      if (!res.ok) {
-        throw new Error("Failed to update banner");
-      } else setSuccess(true);
+        if (!res.ok) {
+          throw new Error("Failed to update banner");
+        } else setSuccess(true);
+      }
     } catch (error) {
       console.log(error);
     }
