@@ -5,7 +5,7 @@ import ProductForm from "./components/Form";
 import ProductLists from "./components/ProductLists";
 import { BACKEND_URL } from "@/lib/constant";
 
-const page = () => {
+const Page = () => {
   const [products, setProducts] = React.useState([]);
   const getProducts = async () => {
   const res = await fetch(`${BACKEND_URL}/products`, {
@@ -45,4 +45,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

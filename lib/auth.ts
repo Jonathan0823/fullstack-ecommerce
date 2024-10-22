@@ -65,7 +65,10 @@ async function refreshToken(token: JWT): Promise<JWT> {
           return await refreshToken(token);
       },
       async session({ session, token }) {
-        session.user = token.user;
+        session.user = {
+          ...token.user,
+          IsAdmin: token.user.isAdmin,
+        };
         session.backendTokens = token.backendTokens;
         return session;
       },
