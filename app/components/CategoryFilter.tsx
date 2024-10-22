@@ -61,7 +61,7 @@ export default function CategoryFilter() {
   const [loading, setLoading] = useState(true);
   
   const getProducts = async () => {
-    const response = await fetch(`${BACKEND_URL}/products`, {
+    const response = await fetch(`${BACKEND_URL}/products?limit=10`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
