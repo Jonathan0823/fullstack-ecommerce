@@ -2,7 +2,6 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { BACKEND_URL } from "@/lib/constant";
-import { useSession } from "next-auth/react";
 import React, { useEffect } from "react";
 
 interface refresh {

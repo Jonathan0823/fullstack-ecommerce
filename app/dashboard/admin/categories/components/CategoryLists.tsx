@@ -7,8 +7,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { BACKEND_URL } from "@/lib/constant";
-import { Pencil, Trash2 } from "lucide-react";
-import React from "react";
+import { Trash2 } from "lucide-react";
+import { useEffect, useState } from "react";
+import { PopOverCategory } from "./PopOver";
 
 interface Category {
   id: string;
@@ -30,7 +31,7 @@ const CategoryLists = ({ categories, session, refresh }: CategoryListsProps) => 
   const sortedCategories = categories.sort(
     (a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
   );
-
+  const [error, setError] = useState(false);
   const handleDelete = async (id: string) => {
     if (session) {
       const res = await fetch(`${BACKEND_URL}/categories/delete`, {
@@ -43,14 +44,28 @@ const CategoryLists = ({ categories, session, refresh }: CategoryListsProps) => 
       });
       if (res.ok) {
         await refresh();
+      } else{
+        setError(true);
       }
     }
   };
+
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => {
+        setError(false);
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [error]);
+
 
   return (
     <div className="bg-white p-5 rounded-xl shadow-md flex-1">
       <div className="bg-white p-5 rounded-xl shadow-md flex-1">
         <p className="font-semibold mb-2 border-b-2 pb-2">Category List</p>
+        <p className="text-red-400">{error && "Failed to delete category"
+          }</p>
 
         <Table>
           <TableHeader>
@@ -64,9 +79,7 @@ const CategoryLists = ({ categories, session, refresh }: CategoryListsProps) => 
                 <TableCell>{category.name}</TableCell>
                 <TableCell>
                   <div className="flex gap-3 ml-24">
-                    <button>
-                      <Pencil className="cursor-pointer text-blue-500" />
-                    </button>
+                    <PopOverCategory category={category} session={session} refresh={refresh}/>
                     <button onClick={() => handleDelete(category.id)}>
                       <Trash2 className="cursor-pointer text-red-500" />
                     </button>

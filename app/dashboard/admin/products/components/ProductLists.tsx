@@ -8,6 +8,8 @@ import {
 } from "@/components/ui/table";
 import Image from "next/image";
 import React from "react";
+import { PopOverProduct } from "./PopOver";
+import { Trash2 } from "lucide-react";
 
 interface Product {
   id: number;
@@ -43,12 +45,17 @@ const ProductLists: React.FC<ProductListsProps> = ({ products }) => {
                   alt={product.name}
                   width={80}
                   height={80}
-                  className="w-20 object-cover"/>
+                  className="w-20 object-cover"
+                />
               </TableCell>
               <TableCell>{product.name}</TableCell>
               <TableCell className="w-2">{product.price}</TableCell>
-              <TableCell className="w-5">edit</TableCell>
-              <TableCell>delete</TableCell>
+              <div className="flex gap-3 ml-24 mt-3">
+                <PopOverProduct/>
+                <button>
+                  <Trash2 className="cursor-pointer text-red-500" />
+                </button>
+              </div>
             </TableRow>
           ))}
         </TableBody>
