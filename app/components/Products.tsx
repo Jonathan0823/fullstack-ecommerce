@@ -1,27 +1,20 @@
-import { BACKEND_URL } from "@/lib/constant";
+
 import Image from "next/image";
 
 interface Product {
   id: string;
   name: string;
   image: string;
-  rating: number;
   price: number;
-  discountPercentage: number;
 }
 
-const Products = async () => {
-  const res = await fetch(`${BACKEND_URL}/products`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      "Cache-Control": "no-cache",
-      "Pragma": "no-cache", 
-      "Expires": "0", 
-    },
-  });
-  const products = await res.json();
-  console.log(products);
+interface Products {
+  products: Product[];
+}
+
+const Products = ({products}: Products) => {
+  
+
 
   return (
     <div>
@@ -48,7 +41,7 @@ const Products = async () => {
                     {product.name}
                   </a>
                 </h3>
-                <p className="mt-1 text-sm text-gray-500">{product.rating}</p>
+                <p className="mt-1 text-sm text-gray-500"></p>
               </div>
               <div className="flex flex-col">
                 <p className="text-sm block font-medium text-gray-900">
