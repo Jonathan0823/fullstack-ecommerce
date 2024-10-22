@@ -7,6 +7,7 @@ import { BACKEND_URL } from "@/lib/constant";
 
 const Page = () => {
   const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
   const getCategories = async () => {
     const res = await fetch(`${BACKEND_URL}/categories`, {
       method: "GET",
@@ -18,15 +19,14 @@ const Page = () => {
     setCategories(data);
   };
 
-
   useEffect(() => {
     getCategories();
+    setLoading(false);
   }, []);
 
   const refresh = async () => {
     await getCategories();
-  }
-
+  };
 
   return (
     <div>
@@ -35,8 +35,14 @@ const Page = () => {
         <h1 className="text-2xl font-bold ">Categories</h1>
       </div>
       <div className="flex mt-2 gap-1 lg:flex-row flex-col ml-3">
-      <CategoryForm refresh={refresh}/>
-      <CategoryLists categories={categories}/>
+        {loading ? (
+          <></>
+        ) : (
+          <>
+            <CategoryForm refresh={refresh} />
+            <CategoryLists categories={categories} />
+          </>
+        )}
       </div>
     </div>
   );
