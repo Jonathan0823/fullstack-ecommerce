@@ -4,8 +4,10 @@ import React, { useEffect, useState } from "react";
 import CategoryForm from "./components/Form";
 import CategoryLists from "./components/CategoryLists";
 import { BACKEND_URL } from "@/lib/constant";
+import { useSession } from "next-auth/react";
 
 const Page = () => {
+  const { data: session } = useSession();
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const getCategories = async () => {
@@ -39,8 +41,8 @@ const Page = () => {
           <></>
         ) : (
           <>
-            <CategoryForm refresh={refresh} />
-            <CategoryLists categories={categories} />
+            {session && <CategoryForm refresh={refresh} session={session} />}
+            {session && <CategoryLists categories={categories} session={session} refresh={refresh} />}
           </>
         )}
       </div>

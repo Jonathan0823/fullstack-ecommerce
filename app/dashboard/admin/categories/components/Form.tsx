@@ -3,21 +3,44 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { BACKEND_URL } from "@/lib/constant";
 import { useSession } from "next-auth/react";
-import React from "react";
+import React, { useEffect } from "react";
 
 interface refresh {
   refresh: () => void;
+  session: {
+    backendTokens: {
+      accessToken: string;
+    };
+  }
 }
 
-const CategoryForm = ({ refresh }: refresh) => {
-  const { data: session } = useSession();
-
+const CategoryForm = ({ refresh, session }: refresh) => {
+  
+  
   const [name, setName] = React.useState("");
   const [success, setSuccess] = React.useState(false);
+  const [error, setError] = React.useState(false);
+  
+  useEffect(() => {
+    if (error) {
+      setSuccess(false);
+      const timer = setTimeout(() => {
+        setError(false);
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+    if (success){
+      setError(false);
+      const timer = setTimeout(() => {
+        setSuccess(false);
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [error, success]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(session);
+    if(!name) return setError(true);
     if (session) {
       try {
         const response = await fetch(`${BACKEND_URL}/categories/create`, {
@@ -36,6 +59,7 @@ const CategoryForm = ({ refresh }: refresh) => {
         setSuccess(true);
         await refresh();
       } catch (error) {
+        setError(true);
         console.log(error);
       }
     }
@@ -48,10 +72,10 @@ const CategoryForm = ({ refresh }: refresh) => {
         <Input
           placeholder="Category Name"
           value={name}
-          required
           onChange={(e) => setName(e.target.value)}
         />
         {success && <p className="text-green-500">Category Created</p>}
+        {error && <p className="text-red-500">Something went wrong, make sure theres no duplicate</p>}
         <Button className="mt-3" type="submit">Create</Button>
       </form>
     </div>
