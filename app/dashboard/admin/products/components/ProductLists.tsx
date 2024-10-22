@@ -7,7 +7,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Image from "next/image";
-import React, { useEffect } from "react";
+import { FC, useEffect, useState } from "react";
 import { PopOverProduct } from "./PopOver";
 import { Trash2 } from "lucide-react";
 import { BACKEND_URL } from "@/lib/constant";
@@ -17,6 +17,7 @@ interface Product {
   name: string;
   price: number;
   image: string;
+  categoryName: string;
   brand: string;
   stock: number;
   description: string;
@@ -37,13 +38,13 @@ interface ProductListsProps {
   }[];
 }
 
-const ProductLists: React.FC<ProductListsProps> = ({
+const ProductLists: FC<ProductListsProps> = ({
   products,
   session,
   refresh,
   categories
 }) => {
-  const [error, setError] = React.useState(false);
+  const [error, setError] = useState(false);
 
   const handleDelete = async (id: string) => {
     const res = await fetch(`${BACKEND_URL}/products/delete`, {
@@ -79,7 +80,8 @@ const ProductLists: React.FC<ProductListsProps> = ({
         <TableHeader>
           <TableRow>
             <TableHead className="w-28">Image</TableHead>
-            <TableHead className="w-64">Name</TableHead>
+            <TableHead className="w-44">Name</TableHead>
+            <TableHead className="w-64">Category</TableHead>            
             <TableHead className="w-auto">Price</TableHead>
           </TableRow>
         </TableHeader>
@@ -96,6 +98,7 @@ const ProductLists: React.FC<ProductListsProps> = ({
                 />
               </TableCell>
               <TableCell>{product.name}</TableCell>
+              <TableCell>{product.categoryName}</TableCell>
               <TableCell className="w-2">{product.price}</TableCell>
               <div className="flex gap-3 ml-24 mt-3">
                 <PopOverProduct categories={categories} product={product} refresh={refresh} session={session} />

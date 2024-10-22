@@ -55,8 +55,8 @@ export function PopOverProduct({
   const [name, setName] = useState("");
   const [brand, setBrand] = useState("");
   const [stock, setStock] = useState<number>(0);
-  const [price, setPrice] = useState<number>(0);
-  const [image, setImage] = useState<string>("");
+  const [price, setPrice] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [file, setFile] = useState<File>();
@@ -64,48 +64,83 @@ export function PopOverProduct({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (
-      !selectedCategory
-    ) {
+
+    const cleanedPrice = price.replace(/[,\.]/g, "");
+
+    if (!cleanedPrice || isNaN(parseInt(cleanedPrice))) {
       setError(true);
+      setErrorMessage("Price must be a valid number");
+      return;
+    }
+
+    
+
+    if (!selectedCategory) {
+      setError(true);
+      setErrorMessage("Category must be selected");
       return;
     }
     try {
-        if (file){
-            const resImg = await edgestore.publicFiles.upload({
-              file,
-              onProgressChange: (progress) => {
-                setProgress(progress);
-              },
-            });
-            if (!resImg) {
-              throw new Error("Image not uploaded");
-            }
-            setImage(resImg.url);
-
+      if (file) {
+        const resImg = await edgestore.publicFiles.upload({
+          file,
+          onProgressChange: (progress) => {
+            setProgress(progress);
+          },
+        });
+        if (!resImg) {
+          throw new Error("Image not uploaded");
         }
 
-      const res = await fetch(`${BACKEND_URL}/products/update`, {
-        method: "PATCH",
-        headers: {
-          authorization: `Bearer ${session.backendTokens.accessToken}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          id: product.id,
-          name: name? name : product.name,
-          image: image? image : product.image,
-          categoryName: selectedCategory? selectedCategory : product.category,
-          brand: brand? brand : product.brand,
-          stock: stock? stock : product.stock,
-          price: price? price : product.price,
-          description: description? description : product.description,
-        }),
-      });
-      if (!res.ok) {
-        throw new Error("Network response was not ok");
+        const res = await fetch(`${BACKEND_URL}/products/update`, {
+          method: "PATCH",
+          headers: {
+            authorization: `Bearer ${session.backendTokens.accessToken}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            id: product.id,
+            name: name ? name : product.name,
+            image: resImg.url,
+            categoryName: selectedCategory
+              ? selectedCategory
+              : product.category,
+            brand: brand ? brand : product.brand,
+            stock: stock ? stock : product.stock,
+            price: cleanedPrice ? parseInt(cleanedPrice) : product.price,
+            description: description ? description : product.description,
+          }),
+        });
+        if (!res.ok) {
+          throw new Error("Network response was not ok");
+        } else {
+          await refresh();
+        }
       } else {
-        await refresh();
+        const res = await fetch(`${BACKEND_URL}/products/update`, {
+          method: "PATCH",
+          headers: {
+            authorization: `Bearer ${session.backendTokens.accessToken}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            id: product.id,
+            name: name ? name : product.name,
+            image: product.image,
+            categoryName: selectedCategory
+              ? selectedCategory
+              : product.category,
+            brand: brand ? brand : product.brand,
+            stock: stock ? stock : product.stock,
+            price: cleanedPrice ? parseInt(cleanedPrice) : product.price,
+            description: description ? description : product.description,
+          }),
+        });
+        if (!res.ok) {
+          throw new Error("Network response was not ok");
+        } else {
+          await refresh();
+        }
       }
     } catch (error) {
       console.log(error);
@@ -126,7 +161,7 @@ export function PopOverProduct({
       <PopoverTrigger>
         <Pencil className="cursor-pointer text-blue-500" />{" "}
       </PopoverTrigger>
-      <PopoverContent className="max-h-[80vh] overflow-y-auto p-4 w-[400px]">
+      <PopoverContent className="max-h-96 overflow-y-auto p-4 w-[400px]">
         <div className="bg-white p-5 rounded-xl shadow-md">
           <form className="flex flex-col gap-1" onSubmit={handleSubmit}>
             <p className="font-semibold mb-2">Create Product</p>
@@ -173,7 +208,7 @@ export function PopOverProduct({
             <p className="text-sm font-semibold">Brand</p>
             <Input
               placeholder="Product Brand"
-              value={product.brand}
+              defaultValue={product.brand}
               onChange={(e) => setBrand(e.target.value)}
             />
             <p className="text-sm font-semibold">Stock</p>
@@ -186,9 +221,9 @@ export function PopOverProduct({
             <p className="text-sm font-semibold">Price</p>
             <Input
               placeholder="Product Price"
-              type="number"
+              type="text"
               defaultValue={product.price}
-              onChange={(e) => setPrice(parseInt(e.target.value))}
+              onChange={(e) => setPrice(e.target.value)}
             />
             <p className="text-sm font-semibold">Description</p>
             <textarea
@@ -200,9 +235,7 @@ export function PopOverProduct({
             />
 
             {error && (
-              <p className="text-red-500 text-sm mt-1">
-                All input field must be filled!
-              </p>
+              <p className="text-red-500 text-sm mt-1">{errorMessage}</p>
             )}
 
             <Button className="mt-3" type="submit">
