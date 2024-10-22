@@ -76,7 +76,8 @@ const ProductLists: FC<ProductListsProps> = ({
       <p className="font-semibold mb-2 border-b-2 pb-2">Product List</p>
       {error && <p className="text-red-500">Failed to delete product</p>}
 
-      <Table>
+    
+      <Table className="overflow-y-auto">
         <TableHeader>
           <TableRow>
             <TableHead className="w-28">Image</TableHead>

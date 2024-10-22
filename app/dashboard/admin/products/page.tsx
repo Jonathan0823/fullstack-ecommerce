@@ -12,7 +12,7 @@ const Page = () => {
   const [loading, setLoading] = React.useState(true);
   const { data: session } = useSession();
   const getProducts = async () => {
-    const res = await fetch(`${BACKEND_URL}/products`, {
+    const res = await fetch(`${BACKEND_URL}/products?limit=100`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

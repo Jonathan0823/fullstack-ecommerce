@@ -22,6 +22,7 @@ import {
 import Products from "./Products";
 import { BACKEND_URL } from "@/lib/constant";
 import FeaturedSlider from "./FeaturedSlider";
+import PaginationUI from "./Pagination";
 
 interface SortOption {
   name: string;
@@ -62,7 +63,7 @@ export default function CategoryFilter() {
   const [loading, setLoading] = useState(true);
 
   const getProducts = async () => {
-    const response = await fetch(`${BACKEND_URL}/products?limit=10`, {
+    const response = await fetch(`${BACKEND_URL}/products?limit=8`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -131,7 +132,7 @@ export default function CategoryFilter() {
   };
 
   return (
-    <div className="bg-white rounded-md flex flex-col lg:flex-row ">
+    <div className="bg-white rounded-md">
       {!loading && (
         <div>
           {/* Mobile filter dialog */}
@@ -349,6 +350,7 @@ export default function CategoryFilter() {
           </main>
         </div>
       )}
+      <PaginationUI />
     </div>
   );
 }

@@ -80,7 +80,7 @@ const UploadBanner = () => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            url: link ? link : banner.url,
+            url: link,
           }),
         });
 
