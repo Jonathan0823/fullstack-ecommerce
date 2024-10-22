@@ -11,6 +11,7 @@ import React from "react";
 interface Category {
   id: number;
   name: string;
+  updatedAt: string;
 }
 
 interface CategoryListsProps {
@@ -18,6 +19,7 @@ interface CategoryListsProps {
 }
 
 const CategoryLists = ({ categories }: CategoryListsProps) => {
+  const sortedCategories = categories.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
   return (
     <div className="bg-white p-5 rounded-xl shadow-md flex-1">
       <div className="bg-white p-5 rounded-xl shadow-md flex-1">
@@ -30,7 +32,7 @@ const CategoryLists = ({ categories }: CategoryListsProps) => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {categories.map((category: Category) => (
+            {sortedCategories.map((category: Category) => (
               <TableRow key={category.id}>
                 <TableCell>{category.name}</TableCell>
                 <TableCell className="w-5">edit</TableCell>
