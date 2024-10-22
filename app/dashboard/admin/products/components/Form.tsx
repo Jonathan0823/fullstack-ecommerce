@@ -11,6 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import LinearProgress from '@mui/material/LinearProgress';
 
 interface ProductFormProps {
   categories: Category[];
@@ -22,6 +23,7 @@ interface Category {
 }
 
 const ProductForm: FC<ProductFormProps> = ({ categories }) => {
+  const [progress, setProgress] = useState<number>(0);
   const [file, setFile] = useState<File>();
   const [name, setName] = useState<string>("");
   const [brand, setBrand] = useState<string>("");
@@ -76,6 +78,7 @@ const ProductForm: FC<ProductFormProps> = ({ categories }) => {
             }}
           />
         </div>
+        <LinearProgress variant="determinate" value={progress} />
         <p className="text-sm font-semibold">Name</p>
         <Input
           placeholder="Product Name"
@@ -145,11 +148,7 @@ const ProductForm: FC<ProductFormProps> = ({ categories }) => {
               const res = await edgestore.publicFiles.upload({
                 file,
                 onProgressChange: (progress) => {
-                  // you can use this to show a progress bar
-                  console.log(progress);
-                },
-                options: {
-                  temporary: true,
+                  setProgress(progress);
                 },
               });
               setImages(res);
