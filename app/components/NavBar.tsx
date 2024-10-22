@@ -153,7 +153,7 @@ export default function NavBar() {
         <div className="fixed inset-0 z-50 flex">
           <DialogPanel
             transition
-            className="relative flex w-full max-w-xs transform flex-col overflow-y-auto bg-white pb-12 shadow-xl transition duration-300 ease-in-out data-[closed]:-translate-x-full"
+            className="relative flex w-full max-w-xs transform flex-col overflow-y-auto bg-blue-100 pb-12 shadow-xl transition duration-300 ease-in-out data-[closed]:-translate-x-full"
           >
             <div className="flex px-4 pb-2 pt-5 z-50">
               <button
@@ -182,7 +182,7 @@ export default function NavBar() {
         </div>
       </Dialog>
 
-      <header className="relative bg-white">
+      <header className="relative bg-blue-100">
 
         <nav aria-label="Top" className="max-w-full px-4 sm:px-6 lg:px-8">
           <div className="border-b border-gray-200">
@@ -232,7 +232,7 @@ export default function NavBar() {
 
                 {/* Search */}
                 <div className="flex lg:ml-6">
-                  <a href="#" className="p-2 text-gray-400 hover:text-gray-500">
+                  <a href="#" className="p-2 text-gray-400 hover:text-gray-700">
                     <span className="sr-only">Search</span>
                     <MagnifyingGlassIcon aria-hidden="true" className="h-6 w-6" />
                   </a>
