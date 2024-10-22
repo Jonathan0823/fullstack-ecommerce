@@ -21,6 +21,7 @@ import {
 } from "@heroicons/react/20/solid";
 import Products from "./Products";
 import { BACKEND_URL } from "@/lib/constant";
+import FeaturedSlider from "./FeaturedSlider";
 
 interface SortOption {
   name: string;
@@ -56,10 +57,10 @@ export default function CategoryFilter() {
     id: string;
     name: string;
   }
-  
+
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
-  
+
   const getProducts = async () => {
     const response = await fetch(`${BACKEND_URL}/products?limit=10`, {
       method: "GET",
@@ -91,22 +92,27 @@ export default function CategoryFilter() {
         return getProducts();
       }
       const query = selectedCategories.join(",");
-      const response = await fetch(
-        `${BACKEND_URL}/products/category?categories=${query}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
+      try {
+        const response = await fetch(
+          `${BACKEND_URL}/products/category/search?categories=${query}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
         }
-      );
-      const data = await response.json();
-      setProducts(data);
+        const data = await response.json();
+        setProducts(data);
+      } catch (error) {
+        console.error("Error fetching products by categories:", error);
+      }
     };
     getProductbyCategories();
   }, [selectedCategories]);
-
-  
 
   const handleCheckboxChange = (categoryName: string) => {
     setSelectedCategories((prevSelectedCategories) => {
@@ -181,27 +187,27 @@ export default function CategoryFilter() {
                     </h3>
                     <DisclosurePanel className="pt-6">
                       <div className="space-y-6">
-                        {categories.map((categories) => (
+                        {categories.map((category) => (
                           <div
-                            key={categories.id}
+                            key={category.id}
                             className="flex items-center"
                           >
                             <input
                               type="checkbox"
-                              id={`checkbox-${categories.name}`}
+                              id={`checkbox-${category.name}`}
                               className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                               checked={selectedCategories.includes(
-                                categories.name
+                                category.name
                               )}
                               onChange={() =>
-                                handleCheckboxChange(categories.name)
+                                handleCheckboxChange(category.name)
                               }
                             />
                             <label
-                              htmlFor={`checkbox-${categories.name}`}
+                              htmlFor={`checkbox-${category.name}`}
                               className="ml-3 min-w-0 flex-1 text-gray-500"
                             >
-                              {categories.name}
+                              {category.name}
                             </label>
                           </div>
                         ))}
@@ -298,12 +304,10 @@ export default function CategoryFilter() {
                     <DisclosurePanel className="pt-6">
                       <div className="space-y-4">
                         {categories.map((category) => (
-                          <div
-                            key={category.id}
-                            className="flex items-center"
-                          >
+                          <div key={category.id} className="flex items-center">
                             <input
                               type="checkbox"
+                              id={`checkbox-${category.name}`}
                               className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                               checked={selectedCategories.includes(
                                 category.name
@@ -312,7 +316,9 @@ export default function CategoryFilter() {
                                 handleCheckboxChange(category.name)
                               }
                             />
-                            <label className="ml-3 text-sm text-gray-600">
+                            <label 
+                            htmlFor={`checkbox-${category.name}`}
+                            className="ml-3 text-sm text-gray-600">
                               {category.name}
                             </label>
                           </div>
@@ -324,8 +330,12 @@ export default function CategoryFilter() {
 
                 {/* Product grid */}
 
-                <div className="lg:col-span-3">
+                <div className="lg:col-span-3 col-span-2">
                   <div className="bg-white">
+                    <div className="ml-4 mb-7 ">
+                    <FeaturedSlider />
+
+                    </div>
                     <div className="mx-auto max-w-2xl px-4 py-4 sm:px-6 sm:py-8 lg:max-w-7xl lg:px-8 border shadow-md rounded-lg">
                       <h2 className="text-2xl font-bold tracking-tight text-gray-900">
                         Products

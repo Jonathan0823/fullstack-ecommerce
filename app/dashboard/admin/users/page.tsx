@@ -4,11 +4,11 @@ import { TableUser } from "./components/Table";
 
 const page = () => {
   return (
-    <div>
-      <div className="bg-white p-6 shadow-lg flex-col gap-5">
+    <div className="flex-col items-center justify-center">
+      <div className="bg-white p-6 shadow-lg flex gap-5 min-h-screen">
         <SidebarTrigger className="lg:hidden" />
         <h1 className="text-2xl font-bold ">Users</h1>
-        <div className="mt-5">
+        <div className="mt-12">
         <TableUser />
         </div>
       </div>

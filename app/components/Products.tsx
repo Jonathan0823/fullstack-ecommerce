@@ -1,5 +1,6 @@
 
 import Image from "next/image";
+import Link from "next/link";
 
 interface Product {
   id: string;
@@ -36,10 +37,10 @@ const Products = ({products}: Products) => {
             <div className="mt-4 flex justify-between mx-2">
               <div>
                 <h3 className="text-sm text-gray-700">
-                  <a href={product.image}>
+                  <Link href={`/product/${product.id}`}>
                     <span aria-hidden="true" className="absolute inset-0" />
                     {product.name}
-                  </a>
+                  </Link>
                 </h3>
                 <p className="mt-1 text-sm text-gray-500"></p>
               </div>

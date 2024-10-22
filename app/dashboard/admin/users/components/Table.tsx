@@ -48,44 +48,36 @@ export function TableUser() {
     setLoading(false);
   }, [users]);
 
-const sortUsersByCreatedAt = (users: User[]) => {
-    return users.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
-};
-
-
+  const sortUsersByCreatedAt = (users: User[]) => {
+    return users.sort(
+      (a, b) =>
+        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+    );
+  };
 
   return (
-    <div>
-      {!loading && (
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-[100px]">Id</TableHead>
-              <TableHead className="w-[120px]">Email</TableHead>
-              <TableHead className="w-[100px]">Name</TableHead>
-              <TableHead>Role</TableHead>
+    <div className="bg-white p-5 rounded-xl shadow-md flex-1">
+
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="w-28">Id</TableHead>
+            <TableHead className="w-44">Email</TableHead>
+            <TableHead className="w-64">Name</TableHead>
+            <TableHead className="w-auto">Status</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {users.map((user: User) => (
+            <TableRow key={user.id}>
+              <TableCell>{user.id}</TableCell>
+              <TableCell>{user.email}</TableCell>
+              <TableCell className="w-2">{user.name}</TableCell>
+              {session && <SelectUserRole user={user} session={session} />}
             </TableRow>
-          </TableHeader>
-          <TableBody>
-            {sortUsersByCreatedAt(users).map((user: User) => (
-              <TableRow key={user.id}>
-                <TableCell>{user.id}</TableCell>
-                <TableCell>{user.email}</TableCell>
-                <TableCell>{user.name}</TableCell>
-                {session && (
-                  <SelectUserRole user={user} session={session} />
-                )}
-              </TableRow>
-            ))}
-          </TableBody>
-          <TableFooter>
-            <TableRow>
-              <TableCell colSpan={3}>Total</TableCell>
-              <TableCell className="text-right">$2,500.00</TableCell>
-            </TableRow>
-          </TableFooter>
-        </Table>
-      )}
+          ))}
+        </TableBody>
+      </Table>
     </div>
   );
 }
