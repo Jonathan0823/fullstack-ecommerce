@@ -7,7 +7,6 @@ import { useEffect, useState } from "react";
 import { useEdgeStore } from "@/lib/edgestore";
 import { useSession } from "next-auth/react";
 import { LinearProgress } from "@mui/material";
-import { set } from "zod";
 
 const UploadBanner = () => {
   const [success, setSuccess] = useState(false);
@@ -51,45 +50,40 @@ const UploadBanner = () => {
   const handleEdit = async (banner: Banner) => {
     if (!session) return;
     try {
-      if (file) {
+      let imageUrl = banner.image; 
+  
+      if (file[banner.id]) {
         const resImg = await edgestore.publicFiles.upload({
           file: file[banner.id] as File,
           onProgressChange: (progress) => {
             setProgress(progress);
           },
         });
-        const res = await fetch(`${BACKEND_URL}/banners/edit/${banner.id}`, {
-          method: "PATCH",
-          headers: {
-            authorization: `Bearer ${session.backendTokens.accessToken}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            image: resImg.url,
-            url: link ? link : banner.url,
-          }),
-        });
-        if (!res.ok) {
-          throw new Error("Failed to update banner");
-        } else setSuccess(true);
-      } else {
-        const res = await fetch(`${BACKEND_URL}/banners/edit/${banner.id}`, {
-          method: "PUT",
-          headers: {
-            authorization: `Bearer ${session.backendTokens.accessToken}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            url: link,
-          }),
-        });
-
-        if (!res.ok) {
-          throw new Error("Failed to update banner");
-        } else setSuccess(true);
+        imageUrl = resImg.url; 
       }
+  
+      const res = await fetch(`${BACKEND_URL}/banners/edit/${banner.id}`, {
+        method: "PATCH",
+        headers: {
+          authorization: `Bearer ${session.backendTokens.accessToken}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          image: imageUrl,
+          url: link ? link : banner.url,
+        }),
+      });
+  
+      if (!res.ok) {
+        throw new Error('Failed to update banner');
+      }
+  
+      const updatedBanner = await res.json();
+      setBanners((prevBanners) =>
+        prevBanners.map((b) => (b.id === updatedBanner.id ? updatedBanner : b))
+      );
     } catch (error) {
-      console.log(error);
+      console.error('Error updating banner:', error);
     }
   };
 
