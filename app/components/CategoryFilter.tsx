@@ -332,7 +332,7 @@ export default function CategoryFilter() {
 
                 <div className="lg:col-span-3 col-span-2">
                   <div className="bg-white">
-                    <div className="ml-4 mb-7 ">
+                    <div className="ml-4 mb-7 overflow-hidden rounded-xl">
                     <FeaturedSlider />
 
                     </div>
