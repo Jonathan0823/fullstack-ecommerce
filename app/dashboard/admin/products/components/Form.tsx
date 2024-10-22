@@ -4,13 +4,30 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useEdgeStore } from "@/lib/edgestore";
 import React from "react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface ProductFormProps {
   handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
+  categories: Category[];
 }
 
-const ProductForm: React.FC<ProductFormProps> = ({ handleSubmit }) => {
+interface Category {
+  id: string;
+  name: string;
+}
+
+const ProductForm: React.FC<ProductFormProps> = ({
+  handleSubmit,
+  categories,
+}) => {
   const [file, setFile] = React.useState<File>();
+  const [selectedCategory, setSelectedCategory] = React.useState<string | null>(null);
   const { edgestore } = useEdgeStore();
 
   return (
@@ -19,15 +36,27 @@ const ProductForm: React.FC<ProductFormProps> = ({ handleSubmit }) => {
         <p className="font-semibold mb-2">Create Product</p>
         <p className="text-sm">Image</p>
         <SingleImageDropzone
-        width={200}
-        height={200}
-        value={file}
-        onChange={(file) => {
-          setFile(file);
-        }}
-      />
+          width={200}
+          height={200}
+          value={file}
+          onChange={(file) => {
+            setFile(file);
+          }}
+        />
         <p className="text-sm">Name</p>
-        <Input placeholder="Category Name" />
+        <Input placeholder="Product Name" />
+        <div className="mt-2">
+          <Select onValueChange={(value) => setSelectedCategory(value)}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Category" />
+            </SelectTrigger>
+            <SelectContent>
+              {categories.map((category: Category) => (
+                <SelectItem key={category.id} value={category.name}>{category.name}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
 
         <Button
           className="mt-3"

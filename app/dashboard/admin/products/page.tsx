@@ -7,6 +7,7 @@ import { BACKEND_URL } from "@/lib/constant";
 
 const Page = () => {
   const [products, setProducts] = React.useState([]);
+  const [categories, setCategories] = React.useState([]);
   const getProducts = async () => {
   const res = await fetch(`${BACKEND_URL}/products`, {
     method: "GET",
@@ -18,8 +19,18 @@ const Page = () => {
   setProducts(data);
   };
 
+  const getCategories = async () => {
+    const res = await fetch(`${BACKEND_URL}/categories`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await res.json();
+    setCategories(data);
+  }
   useEffect(() => {
-    getProducts();
+    Promise.all([getProducts(), getCategories()]);
   }, []);
 
   
@@ -38,7 +49,7 @@ const Page = () => {
         <h1 className="text-2xl font-bold ">Categories</h1>
       </div>
       <div className="flex mt-2 gap-1 lg:flex-row flex-col ml-3">
-        <ProductForm handleSubmit={handleSubmit} />
+        <ProductForm handleSubmit={handleSubmit} categories={categories} />
         <ProductLists products={products} />
       </div>
     </div>

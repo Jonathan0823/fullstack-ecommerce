@@ -21,7 +21,7 @@ const CategoryLists = ({ categories }: CategoryListsProps) => {
   return (
     <div className="bg-white p-5 rounded-xl shadow-md flex-1">
       <div className="bg-white p-5 rounded-xl shadow-md flex-1">
-        <p className="font-semibold mb-2 border-b-2 pb-2">Product List</p>
+        <p className="font-semibold mb-2 border-b-2 pb-2">Category List</p>
 
         <Table>
           <TableHeader>
