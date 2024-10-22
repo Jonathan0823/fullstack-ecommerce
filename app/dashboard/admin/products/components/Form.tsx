@@ -12,6 +12,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import LinearProgress from '@mui/material/LinearProgress';
+import { BACKEND_URL } from "@/lib/constant";
+import { useSession } from "next-auth/react";
 
 interface ProductFormProps {
   categories: Category[];
@@ -23,6 +25,7 @@ interface Category {
 }
 
 const ProductForm: FC<ProductFormProps> = ({ categories }) => {
+  const { data: session } = useSession();
   const [progress, setProgress] = useState<number>(0);
   const [file, setFile] = useState<File>();
   const [name, setName] = useState<string>("");
@@ -32,14 +35,7 @@ const ProductForm: FC<ProductFormProps> = ({ categories }) => {
   const [description, setDescription] = useState<string>("");
   const [error, setError] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [images, setImages] = useState<{
-    url: string;
-    size: number;
-    uploadedAt: Date;
-    metadata: Record<string, never>;
-    path: Record<string, never>;
-    pathOrder: string[];
-  } | null>(null);
+  const [images, setImages] = useState("");
   const { edgestore } = useEdgeStore();
 
   useEffect(() => {
@@ -57,15 +53,37 @@ const ProductForm: FC<ProductFormProps> = ({ categories }) => {
       setError(true);
       return;
     }
-    
-    console.log(selectedCategory);
-    console.log(images);
-    console.log("Form submitted");
+    if (!session) {
+      return;
+    }
+    try{
+      const res = await fetch(`${BACKEND_URL}/products/create`, {
+        method: "POST",
+        headers: {
+          authorization: `Bearer ${session.backendTokens.accessToken}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: name,
+          image: images,
+          categoryName: selectedCategory,
+          brand: brand,
+          stock: stock,
+          price: price,
+          description: description,
+        }),
+      });
+      if (!res.ok) {
+        throw new Error('Network response was not ok');
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
     <div className="bg-white p-5 rounded-xl shadow-md w-full lg:w-[400px]">
-      <form onSubmit={handleSubmit} className="flex flex-col gap-1">
+      <form className="flex flex-col gap-1">
         <p className="font-semibold mb-2">Create Product</p>
         <p className="text-sm font-semibold">Image</p>
         <div className="flex justify-center">
@@ -151,7 +169,8 @@ const ProductForm: FC<ProductFormProps> = ({ categories }) => {
                   setProgress(progress);
                 },
               });
-              setImages(res);
+              setImages(res.url);
+              await handleSubmit;
             }
           }}
         >
