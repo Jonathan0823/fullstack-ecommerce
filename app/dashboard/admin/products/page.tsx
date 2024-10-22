@@ -4,11 +4,13 @@ import React, { useEffect } from "react";
 import ProductForm from "./components/Form";
 import ProductLists from "./components/ProductLists";
 import { BACKEND_URL } from "@/lib/constant";
+import { useSession } from "next-auth/react";
 
 const Page = () => {
   const [products, setProducts] = React.useState([]);
   const [categories, setCategories] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
+  const { data: session } = useSession();
   const getProducts = async () => {
     const res = await fetch(`${BACKEND_URL}/products`, {
       method: "GET",
@@ -35,7 +37,10 @@ const Page = () => {
     setLoading(false);
   }, []);
 
-  
+  const refresh = async () => {
+    await getProducts();
+  }
+
   return (
     <div className="flex-col items-center justify-center min-h-screen">
       <div className="bg-white p-6 shadow-lg flex gap-5">
@@ -47,8 +52,16 @@ const Page = () => {
           <></>
         ) : (
           <>
-            <ProductForm categories={categories} />
-            <ProductLists products={products} />
+            {session && (
+              <>
+                <ProductForm categories={categories} />
+                <ProductLists
+                  products={products}
+                  session={session}
+                  refresh={refresh}
+                />
+              </>
+            )}
           </>
         )}
       </div>

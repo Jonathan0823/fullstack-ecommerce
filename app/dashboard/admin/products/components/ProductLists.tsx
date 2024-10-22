@@ -7,12 +7,13 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Image from "next/image";
-import React from "react";
+import React, { useEffect } from "react";
 import { PopOverProduct } from "./PopOver";
 import { Trash2 } from "lucide-react";
+import { BACKEND_URL } from "@/lib/constant";
 
 interface Product {
-  id: number;
+  id: string;
   name: string;
   price: number;
   image: string;
@@ -20,13 +21,50 @@ interface Product {
 
 interface ProductListsProps {
   products: Product[];
+  session: {
+    backendTokens: {
+      accessToken: string;
+    };
+  };
+  refresh: () => void;
 }
 
-const ProductLists: React.FC<ProductListsProps> = ({ products }) => {
-  console.log(products);
+const ProductLists: React.FC<ProductListsProps> = ({
+  products,
+  session,
+  refresh,
+}) => {
+  const [error, setError] = React.useState(false);
+
+  const handleDelete = async (id: string) => {
+    const res = await fetch(`${BACKEND_URL}/products/delete`, {
+      method: "DELETE",
+      headers: {
+        authorization: `Bearer ${session.backendTokens.accessToken}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id: id }),
+    });
+    if (res.ok) {
+      await refresh();
+    } else {
+      setError(true);
+    }
+  };
+
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => {
+        setError(false);
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [error]);
+
   return (
     <div className="bg-white p-5 rounded-xl shadow-md flex-1">
       <p className="font-semibold mb-2 border-b-2 pb-2">Product List</p>
+      {error && <p className="text-red-500">Failed to delete product</p>}
 
       <Table>
         <TableHeader>
@@ -51,8 +89,12 @@ const ProductLists: React.FC<ProductListsProps> = ({ products }) => {
               <TableCell>{product.name}</TableCell>
               <TableCell className="w-2">{product.price}</TableCell>
               <div className="flex gap-3 ml-24 mt-3">
-                <PopOverProduct/>
-                <button>
+                <PopOverProduct />
+                <button
+                  onClick={() => {
+                    handleDelete(product.id);
+                  }}
+                >
                   <Trash2 className="cursor-pointer text-red-500" />
                 </button>
               </div>
