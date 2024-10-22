@@ -17,6 +17,10 @@ interface Product {
   name: string;
   price: number;
   image: string;
+  brand: string;
+  stock: number;
+  description: string;
+  category: string;
 }
 
 interface ProductListsProps {
@@ -27,12 +31,17 @@ interface ProductListsProps {
     };
   };
   refresh: () => void;
+  categories: {
+    id: string;
+    name: string;
+  }[];
 }
 
 const ProductLists: React.FC<ProductListsProps> = ({
   products,
   session,
   refresh,
+  categories
 }) => {
   const [error, setError] = React.useState(false);
 
@@ -89,7 +98,7 @@ const ProductLists: React.FC<ProductListsProps> = ({
               <TableCell>{product.name}</TableCell>
               <TableCell className="w-2">{product.price}</TableCell>
               <div className="flex gap-3 ml-24 mt-3">
-                <PopOverProduct />
+                <PopOverProduct categories={categories} product={product} refresh={refresh} session={session} />
                 <button
                   onClick={() => {
                     handleDelete(product.id);

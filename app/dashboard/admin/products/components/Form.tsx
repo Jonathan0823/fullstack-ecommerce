@@ -17,6 +17,7 @@ import { useSession } from "next-auth/react";
 
 interface ProductFormProps {
   categories: Category[];
+  refresh: () => void;
 }
 
 interface Category {
@@ -24,7 +25,7 @@ interface Category {
   name: string;
 }
 
-const ProductForm: FC<ProductFormProps> = ({ categories }) => {
+const ProductForm: FC<ProductFormProps> = ({ categories, refresh }) => {
   const { data: session } = useSession();
   const [progress, setProgress] = useState<number>(0);
   const [file, setFile] = useState<File>();
@@ -90,6 +91,16 @@ const ProductForm: FC<ProductFormProps> = ({ categories }) => {
       });
       if (!res.ok) {
         throw new Error("Network response was not ok");
+      } else {
+        await refresh();
+        setProgress(0);
+        setFile(undefined);
+        setName("");
+        setBrand("");
+        setStock(0);
+        setPrice(0);
+        setDescription("");
+        setSelectedCategory(null);
       }
     } catch (error) {
       console.log(error);
@@ -106,6 +117,9 @@ const ProductForm: FC<ProductFormProps> = ({ categories }) => {
             width={200}
             height={200}
             value={file}
+            dropzoneOptions={{
+              maxSize: 1024 * 1024 * 2,
+            }}
             onChange={(file) => {
               setFile(file);
             }}

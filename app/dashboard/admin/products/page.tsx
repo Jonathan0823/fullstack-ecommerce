@@ -45,7 +45,7 @@ const Page = () => {
     <div className="flex-col items-center justify-center min-h-screen">
       <div className="bg-white p-6 shadow-lg flex gap-5">
         <SidebarTrigger className="lg:hidden" />
-        <div className="text-2xl font-bold">Categories</div>
+        <div className="text-2xl font-bold">Products</div>
       </div>
       <div className="flex mt-2 gap-1 lg:flex-row flex-col ml-3">
         {loading ? (
@@ -54,8 +54,9 @@ const Page = () => {
           <>
             {session && (
               <>
-                <ProductForm categories={categories} />
+                <ProductForm categories={categories} refresh={refresh}/>
                 <ProductLists
+                  categories={categories}
                   products={products}
                   session={session}
                   refresh={refresh}
