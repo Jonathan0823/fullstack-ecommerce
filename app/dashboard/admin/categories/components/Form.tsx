@@ -15,7 +15,8 @@ const CategoryForm = ({ refresh }: refresh) => {
   const [name, setName] = React.useState("");
   const [success, setSuccess] = React.useState(false);
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     console.log(session);
     if (session) {
       try {
