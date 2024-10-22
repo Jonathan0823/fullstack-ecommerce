@@ -11,7 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import LinearProgress from '@mui/material/LinearProgress';
+import LinearProgress from "@mui/material/LinearProgress";
 import { BACKEND_URL } from "@/lib/constant";
 import { useSession } from "next-auth/react";
 
@@ -35,7 +35,6 @@ const ProductForm: FC<ProductFormProps> = ({ categories }) => {
   const [description, setDescription] = useState<string>("");
   const [error, setError] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [images, setImages] = useState("");
   const { edgestore } = useEdgeStore();
 
   useEffect(() => {
@@ -49,14 +48,30 @@ const ProductForm: FC<ProductFormProps> = ({ categories }) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!file || !name || !brand || !stock || !price || !description || !selectedCategory) {
+
+    if (
+      !file ||
+      !name ||
+      !brand ||
+      !stock ||
+      !price ||
+      !description ||
+      !selectedCategory
+    ) {
       setError(true);
       return;
     }
     if (!session) {
       return;
     }
-    try{
+    try {
+      const resImg = await edgestore.publicFiles.upload({
+        file,
+        onProgressChange: (progress) => {
+          setProgress(progress);
+        },
+      });
+
       const res = await fetch(`${BACKEND_URL}/products/create`, {
         method: "POST",
         headers: {
@@ -65,7 +80,7 @@ const ProductForm: FC<ProductFormProps> = ({ categories }) => {
         },
         body: JSON.stringify({
           name: name,
-          image: images,
+          image: resImg.url,
           categoryName: selectedCategory,
           brand: brand,
           stock: stock,
@@ -74,7 +89,7 @@ const ProductForm: FC<ProductFormProps> = ({ categories }) => {
         }),
       });
       if (!res.ok) {
-        throw new Error('Network response was not ok');
+        throw new Error("Network response was not ok");
       }
     } catch (error) {
       console.log(error);
@@ -83,7 +98,7 @@ const ProductForm: FC<ProductFormProps> = ({ categories }) => {
 
   return (
     <div className="bg-white p-5 rounded-xl shadow-md w-full lg:w-[400px]">
-      <form className="flex flex-col gap-1">
+      <form className="flex flex-col gap-1" onSubmit={handleSubmit}>
         <p className="font-semibold mb-2">Create Product</p>
         <p className="text-sm font-semibold">Image</p>
         <div className="flex justify-center">
@@ -155,25 +170,9 @@ const ProductForm: FC<ProductFormProps> = ({ categories }) => {
           <p className="text-red-500 text-sm mt-1">
             All input field must be filled!
           </p>
-          
         )}
 
-        <Button
-          className="mt-3"
-          type="submit"
-          onClick={async () => {
-            if (file) {
-              const res = await edgestore.publicFiles.upload({
-                file,
-                onProgressChange: (progress) => {
-                  setProgress(progress);
-                },
-              });
-              setImages(res.url);
-              await handleSubmit;
-            }
-          }}
-        >
+        <Button className="mt-3" type="submit">
           Create
         </Button>
       </form>

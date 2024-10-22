@@ -13,7 +13,7 @@ interface Product {
   id: number;
   name: string;
   price: number;
-  thumbnail: string;
+  image: string;
 }
 
 interface ProductListsProps {
@@ -39,7 +39,7 @@ const ProductLists: React.FC<ProductListsProps> = ({ products }) => {
             <TableRow key={product.id}>
               <TableCell>
                 <Image
-                  src={product.thumbnail}
+                  src={product.image}
                   alt={product.name}
                   width={80}
                   height={80}
