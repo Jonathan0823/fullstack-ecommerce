@@ -54,6 +54,9 @@ export default function CategoryFilter() {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [products, setProducts] = useState<Product[]>([]);
+  const [totalPages, setTotalPages] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+
   interface Category {
     id: string;
     name: string;
@@ -63,14 +66,15 @@ export default function CategoryFilter() {
   const [loading, setLoading] = useState(true);
 
   const getProducts = async () => {
-    const response = await fetch(`${BACKEND_URL}/products?limit=8&page=1`, {
+    const response = await fetch(`${BACKEND_URL}/products?limit=8&page=${currentPage}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
     });
     const data = await response.json();
-    setProducts(data);
+    setProducts(data.products);
+    setTotalPages(data.totalPages);
     setLoading(false);
   };
   useEffect(() => {
@@ -85,7 +89,7 @@ export default function CategoryFilter() {
       setCategories(data);
     };
     Promise.all([getCategories(), getProducts()]);
-  }, []);
+  }, [currentPage]);
 
   useEffect(() => {
     const getProductbyCategories = async () => {
@@ -130,6 +134,10 @@ export default function CategoryFilter() {
       return updatedCategories;
     });
   };
+
+  const onPageChange = (page: number) => {
+    setCurrentPage(page);
+  }
 
   return (
     <div className="bg-white rounded-md">
@@ -350,7 +358,7 @@ export default function CategoryFilter() {
           </main>
         </div>
       )}
-      <PaginationUI />
+      <PaginationUI currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} />
     </div>
   );
 }
