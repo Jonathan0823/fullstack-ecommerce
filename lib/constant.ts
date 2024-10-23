@@ -1,1 +1,1 @@
-export const BACKEND_URL = "https://shoppu-czf0abd0e3bfbhej.southeastasia-01.azurewebsites.net";
+export const BACKEND_URL = "http://localhost:8000";
