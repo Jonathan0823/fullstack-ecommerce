@@ -34,7 +34,11 @@ const Page = async ({ params }: { params: { id: string } }) => {
         <div className="flex-1 mt-5 border p-8 rounded-xl shadow-xl">
           <div>
             <h1 className="text-3xl font-bold mb-4">{product.name}</h1>
-            <p className="text-gray-700 mb-4">{product.description}</p>
+
+            <p className="font-bold mb-3">Description</p>
+            <p className="text-gray-700 mb-4 lg:text-base text-sm">
+              {product.description}
+            </p>
           </div>
           <p className="text-xl font-semibold mb-4">
             {formatPriceToIDR(product.price)}
