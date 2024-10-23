@@ -121,7 +121,6 @@ export default function CategoryFilter() {
 
   const handleCheckboxChange = (categoryName: string) => {
     setSelectedCategories((prevSelectedCategories) => {
-      console.log("Previous selected categories:", prevSelectedCategories);
       let updatedCategories;
       if (prevSelectedCategories.includes(categoryName)) {
         updatedCategories = prevSelectedCategories.filter(
@@ -130,7 +129,7 @@ export default function CategoryFilter() {
       } else {
         updatedCategories = [...prevSelectedCategories, categoryName];
       }
-      console.log("Updated selected categories:", updatedCategories);
+      setCurrentPage(1);
       return updatedCategories;
     });
   };
