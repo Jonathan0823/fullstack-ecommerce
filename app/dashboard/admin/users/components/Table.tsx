@@ -3,7 +3,6 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -48,36 +47,35 @@ export function TableUser() {
     setLoading(false);
   }, [users]);
 
-  const sortUsersByCreatedAt = (users: User[]) => {
-    return users.sort(
-      (a, b) =>
-        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-    );
-  };
+  
+  const sortedUsersbyCreateAt = users.sort((a, b) => {
+    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+  });
 
   return (
     <div className="bg-white p-5 rounded-xl shadow-md flex-1">
-
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-28">Id</TableHead>
-            <TableHead className="w-44">Email</TableHead>
-            <TableHead className="w-64">Name</TableHead>
-            <TableHead className="w-auto">Status</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {users.map((user: User) => (
-            <TableRow key={user.id}>
-              <TableCell>{user.id}</TableCell>
-              <TableCell>{user.email}</TableCell>
-              <TableCell className="w-2">{user.name}</TableCell>
-              {session && <SelectUserRole user={user} session={session} />}
+      {!loading && (
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-28">Id</TableHead>
+              <TableHead className="w-44">Email</TableHead>
+              <TableHead className="w-64">Name</TableHead>
+              <TableHead className="w-auto">Status</TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHeader>
+          <TableBody>
+            {sortedUsersbyCreateAt.map((user: User) => (
+              <TableRow key={user.id}>
+                <TableCell>{user.id}</TableCell>
+                <TableCell>{user.email}</TableCell>
+                <TableCell className="w-2">{user.name}</TableCell>
+                {session && <SelectUserRole user={user} session={session} />}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      )}
     </div>
   );
 }
