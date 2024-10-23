@@ -5,25 +5,25 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React from "react";
 
-const userNavigation = [
-  { name: "Your Profile", href: "/dashboard" },
-  { name: "Your Orders", href: "/orders" },
-];
 
 const Signinoutbutton = () => {
   const { data: session } = useSession();
   console.log(session);
   const { user } = session || {};
   const router = useRouter();
-
+  
   const handleSignOut = async () => {
     await signOut();
   };
-
+  
   const handleSignIn = async () => {
     router.push("/login");
   };
-
+  
+  const userNavigation = [
+    { name: "Your Profile", href: `/dashboard/user/${session?.user.id}` },
+    { name: "Your Orders", href: "/orders" },
+  ];
   const userImage = user?.image || "/images/defaultProfile.svg";
   console.log(session);
   return (

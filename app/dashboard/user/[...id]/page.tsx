@@ -1,8 +1,10 @@
 import NavBar from "@/app/components/NavBar";
+import { Button } from "@/components/ui/button";
 import { authOptions } from "@/lib/auth";
 import { BACKEND_URL } from "@/lib/constant";
 import { EdgeStoreProvider } from "@/lib/edgestore";
 import { getServerSession } from "next-auth";
+import Link from "next/link";
 import React from "react";
 
 const page = async ({ params }: { params: { id: string } }) => {
@@ -29,6 +31,13 @@ const page = async ({ params }: { params: { id: string } }) => {
     <EdgeStoreProvider>
       <div>
         <NavBar />
+        <div className="p-6">
+          {session?.user.isAdmin && (
+            <Link href="/dashboard/admin">
+              <Button className="w-24">Admin Panel</Button>
+            </Link>
+          )}
+        </div>
         <p>{user.name}</p>
         <p>{address.state || ""}</p>
       </div>
