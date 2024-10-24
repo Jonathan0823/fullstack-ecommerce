@@ -41,8 +41,7 @@ export function RegisterForm() {
             console.error("Failed to register");
             return;
           } else{
-            const user = await res.json();
-            console.log(user);
+             await res.json();
             window.location.href = "/login";
           }
     } catch (error) {

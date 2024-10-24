@@ -40,7 +40,6 @@ export default function Cart() {
       const data = await res.json();
       const dataLength = data.length;
       setCarts(data[dataLength - 1].cartItems);
-      console.log(data[0].cartItems);
     } catch (error) {
       console.error("Error fetching cart:", error);
     }

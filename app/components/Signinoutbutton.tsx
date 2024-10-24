@@ -8,7 +8,6 @@ import React from "react";
 
 const Signinoutbutton = () => {
   const { data: session } = useSession();
-  console.log(session);
   const { user } = session || {};
   const router = useRouter();
   
@@ -25,7 +24,6 @@ const Signinoutbutton = () => {
     { name: "Your Orders", href: "/orders" },
   ];
   const userImage = user?.image || "/images/defaultProfile.svg";
-  console.log(session);
   return (
     <div>
       <Menu as="div" className="relative ml-3">

@@ -28,7 +28,6 @@ const page = async () => {
     },
   });
   const data = await res.json();
-  console.log(data);
 
   return (
     <EdgeStoreProvider>
