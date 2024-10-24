@@ -66,12 +66,15 @@ export default function CategoryFilter() {
   const [loading, setLoading] = useState(true);
 
   const getProducts = async () => {
-    const response = await fetch(`${BACKEND_URL}/products?limit=8&page=${currentPage}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await fetch(
+      `${BACKEND_URL}/products?limit=8&page=${currentPage}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
     const data = await response.json();
     setProducts(data.products);
     setTotalPages(data.totalPages);
@@ -136,7 +139,7 @@ export default function CategoryFilter() {
 
   const onPageChange = (page: number) => {
     setCurrentPage(page);
-  }
+  };
 
   return (
     <div className="bg-white rounded-md">
@@ -196,10 +199,7 @@ export default function CategoryFilter() {
                     <DisclosurePanel className="pt-6">
                       <div className="space-y-6">
                         {categories.map((category) => (
-                          <div
-                            key={category.id}
-                            className="flex items-center"
-                          >
+                          <div key={category.id} className="flex items-center">
                             <input
                               type="checkbox"
                               id={`checkbox-${category.name}`}
@@ -324,9 +324,10 @@ export default function CategoryFilter() {
                                 handleCheckboxChange(category.name)
                               }
                             />
-                            <label 
-                            htmlFor={`checkbox-${category.name}`}
-                            className="ml-3 text-sm text-gray-600">
+                            <label
+                              htmlFor={`checkbox-${category.name}`}
+                              className="ml-3 text-sm text-gray-600"
+                            >
                               {category.name}
                             </label>
                           </div>
@@ -341,8 +342,7 @@ export default function CategoryFilter() {
                 <div className="lg:col-span-3 col-span-2">
                   <div className="bg-white">
                     <div className="ml-4 mb-7 overflow-hidden rounded-xl">
-                    <FeaturedSlider />
-
+                      <FeaturedSlider />
                     </div>
                     <div className="mx-auto max-w-2xl px-4 py-4 sm:px-6 sm:py-8 lg:max-w-7xl lg:px-8 border shadow-md rounded-lg">
                       <h2 className="text-2xl font-bold tracking-tight text-gray-900">
@@ -357,7 +357,13 @@ export default function CategoryFilter() {
           </main>
         </div>
       )}
-      <PaginationUI currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} />
+      {!loading && (
+        <PaginationUI
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={onPageChange}
+        />
+      )}
     </div>
   );
 }
