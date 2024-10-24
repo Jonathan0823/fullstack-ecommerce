@@ -19,7 +19,7 @@ const Page = () => {
       },
     });
     const data = await res.json();
-    setProducts(data);
+    setProducts(data.products);
   };
 
   const getCategories = async () => {
@@ -35,7 +35,7 @@ const Page = () => {
   useEffect(() => {
     Promise.all([getProducts(), getCategories()]);
     setLoading(false);
-  }, []);
+  }, [session]);
 
   const refresh = async () => {
     await getProducts();

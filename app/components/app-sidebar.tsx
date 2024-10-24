@@ -79,7 +79,7 @@ export function AppSidebar() {
       <SidebarFooter>
         <SidebarMenuButton>
         <LogOut className="scale-110" />
-          <Link className="ml-3 text-xl" href={"/"}>Exit</Link>
+          <a className="ml-3 text-xl" href={"/"}>Exit</a>
         </SidebarMenuButton>
       </SidebarFooter>
     </Sidebar>
