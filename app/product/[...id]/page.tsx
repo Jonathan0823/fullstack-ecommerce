@@ -9,6 +9,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
+      "Cache-Control": "no-cache",
     },
   });
 

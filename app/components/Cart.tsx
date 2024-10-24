@@ -21,6 +21,7 @@ export default function Cart() {
       image: string;
       price: string;
     };
+    productId: string;
     quantity: number;
   }
 
@@ -38,7 +39,7 @@ export default function Cart() {
       });
       const data = await res.json();
       const dataLength = data.length;
-      setCarts(data[dataLength-1].cartItems);
+      setCarts(data[dataLength - 1].cartItems);
       console.log(data[0].cartItems);
     } catch (error) {
       console.error("Error fetching cart:", error);
@@ -47,20 +48,88 @@ export default function Cart() {
 
   useEffect(() => {
     fetchCart();
-  }, [session,open]);
+  }, [session, open]);
 
   const formatPriceToIDR = (price: number) => {
     return new Intl.NumberFormat("id-ID", {
       style: "currency",
       currency: "IDR",
     }).format(price);
-  }
+  };
 
   const subtotal = carts.reduce((acc, cart) => {
     return acc + parseInt(cart.product.price) * cart.quantity;
   }, 0);
 
   const totalItems = carts.length;
+
+  const handleDecrease = async (productId: string, currentQuantity: number) => {
+    if (!session) return;
+    try {
+      if (currentQuantity == 1) return;
+      const res = await fetch(`${BACKEND_URL}/carts/${session.user.id}/items`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${session?.backendTokens.accessToken}`,
+        },
+        body: JSON.stringify({
+          productId,
+          quantity: currentQuantity - 1,
+        }),
+      });
+      if (!res.ok) {
+        throw new Error("Error changing cart");
+      }
+
+      fetchCart();
+    } catch (error) {
+      console.error("Error changing cart:", error);
+    }
+  };
+
+  const handleIncrease = async (productId: string, currentQuantity: number) => {
+    if (!session) return;
+    try {
+      const res = await fetch(`${BACKEND_URL}/carts/${session.user.id}/items`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${session?.backendTokens.accessToken}`,
+        },
+        body: JSON.stringify({
+          productId,
+          quantity: currentQuantity + 1,
+        }),
+      });
+      if (!res.ok) {
+        throw new Error("Error changing cart");
+      }
+      fetchCart();
+    } catch (error) {
+      console.error("Error changing cart:", error);
+    }
+  };
+
+  const handleRemove = async (productId: string) => {
+    if (!session) return;
+    try {
+      const res = await fetch(`${BACKEND_URL}/carts/${session.user.id}/items/${productId}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${session?.backendTokens.accessToken}`,
+        },
+      });
+      if (!res.ok) {
+        throw new Error("Error deleting cart");
+      }
+      fetchCart();
+    } catch (error) {
+      console.error("Error deleting cart:", error);
+    }
+  }
+    
 
   return (
     <div>
@@ -138,9 +207,18 @@ export default function Cart() {
                                           <a href={cart.product.name}>
                                             {cart.product.name}
                                           </a>
-                                          <p className=" text-sm font-bold">{formatPriceToIDR(parseInt(cart.product.price))}</p>
+                                          <p className=" text-sm font-bold">
+                                            {formatPriceToIDR(
+                                              parseInt(cart.product.price)
+                                            )}
+                                          </p>
                                         </h3>
-                                        <p className="ml-4 text-sm font-bold">{formatPriceToIDR(parseInt(cart.product.price) * cart.quantity)}</p>
+                                        <p className="ml-4 text-sm font-bold">
+                                          {formatPriceToIDR(
+                                            parseInt(cart.product.price) *
+                                              cart.quantity
+                                          )}
+                                        </p>
                                       </div>
                                     </div>
                                     <div className="flex flex-1 items-end justify-between text-sm">
@@ -149,12 +227,46 @@ export default function Cart() {
                                       </p>
 
                                       <div className="flex">
-                                        <button
-                                          type="button"
-                                          className="font-medium text-indigo-600 hover:text-indigo-500"
-                                        >
-                                          Remove
-                                        </button>
+                                        <div className="flex items-center">
+                                          <button
+                                            className="bg-gray-200 text-gray-700 px-2 py-1 rounded-lg hover:bg-gray-300"
+                                            disabled={cart.quantity <= 1}
+                                            onClick={() =>
+                                              handleDecrease(
+                                                cart.productId,
+                                                cart.quantity
+                                              )
+                                            }
+                                          >
+                                            -
+                                          </button>
+                                          <input
+                                            type="text"
+                                            value={cart.quantity}
+                                            disabled
+                                            className="mx-2 w-10 h-10 text-center border rounded-lg"
+                                            min="1"
+                                          />
+                                          <button
+                                            onClick={() =>
+                                              handleIncrease(
+                                                cart.productId,
+                                                cart.quantity
+                                              )
+                                            }
+                                            className="bg-gray-200 text-gray-700 px-2 py-1 rounded-lg hover:bg-gray-300"
+                                          >
+                                            +
+                                          </button>
+
+                                          <button
+                                            type="button"
+                                            className="ml-4 text-sm font-medium text-indigo-600 hover:text-indigo-500"
+                                            onClick={() => handleRemove(cart.productId)}
+                                          >
+                                            Remove
+                                          </button>
+                                        </div>
                                       </div>
                                     </div>
                                   </div>

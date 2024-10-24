@@ -130,9 +130,6 @@ const navigation = {
   ],
   pages: [
     { name: 'Home', href: '/' },
-    { name: 'Services', href: '#' },
-    { name: 'Company', href: '#' },
-    { name: 'Stores', href: '#' },
   ],
 }
 

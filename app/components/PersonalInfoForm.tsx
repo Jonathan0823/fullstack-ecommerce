@@ -1,10 +1,11 @@
 "use client";
+import { Button } from "@/components/ui/button";
 import { BACKEND_URL } from "@/lib/constant";
 import { useSession } from "next-auth/react";
 import React, { useEffect, useMemo, useState } from "react";
 
 const PersonalInfoForm = () => {
-  const {data: session} = useSession();
+  const { data: session } = useSession();
 
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
@@ -15,30 +16,32 @@ const PersonalInfoForm = () => {
   const [state, setState] = useState("");
   const [zipCode, setZipCode] = useState("");
   const [loading, setLoading] = useState(true);
-  
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false);
+
   useEffect(() => {
     const fetchUser = async () => {
       if (session) {
         try {
           const res = await fetch(`${BACKEND_URL}/user/${session.user.id}`, {
-            method: 'GET',
+            method: "GET",
             headers: {
               authorization: `Bearer ${session.backendTokens.accessToken}`,
-              'Content-Type': 'application/json',
+              "Content-Type": "application/json",
             },
           });
           const data = await res.json();
-          const address = JSON.parse(data?.address || '{}');
-          setFirstname(address.firstname || '');
-          setLastname(address.lastname || '');
-          setEmail(address.emailadd || '');
-          setCountry(address.country || '');
-          setStreet(address.street || '');
-          setCity(address.city || '');
-          setState(address.state || '');
-          setZipCode(address.zipCode || '');
+          const address = JSON.parse(data?.address || "{}");
+          setFirstname(address.firstname || "");
+          setLastname(address.lastname || "");
+          setEmail(address.emailadd || "");
+          setCountry(address.country || "Indonesia");
+          setStreet(address.street || "");
+          setCity(address.city || "");
+          setState(address.state || "");
+          setZipCode(address.zipCode || "");
         } catch (error) {
-          console.error('Error fetching user data:', error);
+          console.error("Error fetching user data:", error);
         } finally {
           setLoading(false);
         }
@@ -47,8 +50,55 @@ const PersonalInfoForm = () => {
     fetchUser();
   }, [session]);
 
-  const formContent = useMemo(() => (
-    <form className="mt-4 w-full max-w-3xl flex flex-col space-y-8">
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!session) return;
+    try {
+      const res = await fetch(`${BACKEND_URL}/user/${session.user.id}`, {
+        method: "PATCH",
+        headers: {
+          authorization: `Bearer ${session.backendTokens.accessToken}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          address: {
+            firstname,
+            lastname,
+            emailadd: email,
+            country,
+            state,
+            city,
+            street,
+            zipCode,
+          },
+        }),
+      });
+      if(!res.ok){
+        setError("Failed to update user data");
+        throw new Error("Failed to update user data");
+      }
+      setSuccess(true);
+    } catch (error) {
+      console.error("Error updating user data:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (error) {
+      setTimeout(() => {
+        setError("");
+      }, 3000);
+    }
+    if (success) {
+      setTimeout(() => {
+        setSuccess(false);
+      }, 3000);
+    }
+  }, [error, success]);
+
+  const formContent = useMemo(
+    () => (
+      <form className="mt-4 w-full max-w-3xl flex flex-col space-y-8" onSubmit={handleSubmit}>
         <div className="space-y-12">
           <div className="border-b border-gray-900/10 pb-12">
             <h2 className="text-base font-semibold leading-7 text-gray-900">
@@ -106,7 +156,7 @@ const PersonalInfoForm = () => {
                 <div className="mt-2">
                   <input
                     id="email"
-                    value={email}
+                    value={session?.user.email}
                     onChange={(e) => setEmail(e.target.value)}
                     name="email"
                     type="email"
@@ -132,6 +182,7 @@ const PersonalInfoForm = () => {
                     autoComplete="country-name"
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
                   >
+                    <option>Indonesia</option>
                     <option>United States</option>
                     <option>Canada</option>
                     <option>Mexico</option>
@@ -216,14 +267,20 @@ const PersonalInfoForm = () => {
                     autoComplete="postal-code"
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
+              {success && <p className="text-green-500">Profile Updated!</p>}
+              {error && <p className="text-red-500">{error}</p>}
                 </div>
               </div>
+            </div>
+            <div className="flex justify-end mt-5">
+              <Button type="submit">Save</Button>
             </div>
           </div>
         </div>
       </form>
-
-  ), [firstname, lastname, email, country, street, city, state, zipCode]);
+    ),
+    [firstname, lastname, email, country, street, city, state, zipCode, success, error]
+  );
 
   return (
     <div className="w-full flex justify-center px-4 sm:px-6 lg:px-8 bg-white">

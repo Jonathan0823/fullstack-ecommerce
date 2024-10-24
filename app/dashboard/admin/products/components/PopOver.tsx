@@ -156,6 +156,15 @@ export function PopOverProduct({
     }
   }, [error]);
 
+  useEffect(() => {
+    setName(product.name);
+    setBrand(product.brand);
+    setStock(product.stock);
+    setPrice(product.price.toString());
+    setDescription(product.description);
+    setSelectedCategory(product.category);
+  }, [product]);
+
   return (
     <Popover>
       <PopoverTrigger>
