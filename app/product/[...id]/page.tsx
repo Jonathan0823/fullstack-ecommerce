@@ -1,3 +1,4 @@
+import CheckoutOrderButton from "@/app/components/CheckoutOrderButton";
 import NavBar from "@/app/components/NavBar";
 import { BACKEND_URL } from "@/lib/constant";
 import Image from "next/image";
@@ -22,7 +23,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
   return (
     <div>
       <NavBar />
-      <div className="bg-slate-50 p-6 shadow-lg flex flex-col md:flex-row gap-5 min-h-dvh">
+      <div className="bg-slate-50 p-6 shadow-lg flex flex-col md:flex-row justify-center mx-auto gap-5 min-h-dvh">
         <Image
           src={product.image}
           alt={product.name}
@@ -40,16 +41,31 @@ const Page = async ({ params }: { params: { id: string } }) => {
               {product.description}
             </p>
           </div>
-          <p className="text-xl font-semibold mb-4">
+          <div className="lg:flex flex-row lg:gap-32 text-sm mt-10">
+            <div>
+              <p className="font-semibold mb-1">Category</p>
+              <p className="text-gray-700 mb-4 text-sm">
+                {product.categoryName}
+              </p>
+            </div>
+            <div>
+              <p className="font-semibold mb-1">Brand</p>
+              <p className="text-gray-700 mb-4 text-sm">
+                {product.brand}
+              </p>
+            </div>
+            <div>
+                <p className="font-semibold mb-1">Stock</p>
+                <p className="text-gray-700 mb-4 lg:text-base text-sm">
+                    {product.stock}
+                </p>
+            </div>
+          </div>
+          <p className="text-xl font-semibold mb-4 lg:mt-14">
             {formatPriceToIDR(product.price)}
           </p>
-          <div className="flex gap-4">
-            <button className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
-              Add to Cart
-            </button>
-            <button className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">
-              Checkout
-            </button>
+          <div>
+            <CheckoutOrderButton product={product} />
           </div>
         </div>
       </div>
