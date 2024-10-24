@@ -10,6 +10,7 @@ import { Bars3Icon, MagnifyingGlassIcon, XMarkIcon } from '@heroicons/react/24/o
 import Signinoutbutton from './Signinoutbutton'
 import Image from 'next/image'
 import Cart from './Cart'
+import { Input } from '@/components/ui/input'
 
 
 const navigation = {    
@@ -22,6 +23,17 @@ const navigation = {
 
 export default function NavBar() {
   const [open, setOpen] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
+
+  const handleSearch = () => {
+    window.location.href = `/search/${searchQuery}`
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      handleSearch();
+    }
+  };
 
   return (
     <div className="bg-white z-50 ">
@@ -113,11 +125,17 @@ export default function NavBar() {
                 
 
                 {/* Search */}
-                <div className="flex lg:ml-6">
-                  <a href="#" className="p-2 text-gray-400 hover:text-gray-700">
-                    <span className="sr-only">Search</span>
-                    <MagnifyingGlassIcon aria-hidden="true" className="h-6 w-6" />
-                  </a>
+                <div className="relative flex lg:ml-6 items-center">
+                  <Input
+                    type="text"
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                    placeholder="Search"
+                    className="p-2 pl-10 bg-white border rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  />
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <MagnifyingGlassIcon aria-hidden="true" className="h-5 w-5 text-gray-400" />
+                  </div>
                 </div>
 
                 {/* Cart */}
