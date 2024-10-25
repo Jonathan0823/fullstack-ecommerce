@@ -1,5 +1,6 @@
 import { SidebarTrigger } from '@/components/ui/sidebar'
 import React from 'react'
+import { TableOrders } from './components/Table'
 
 const page = () => {
   return (
@@ -8,6 +9,7 @@ const page = () => {
       <SidebarTrigger className="lg:hidden" />
       <h1 className="text-2xl font-bold ">Orders</h1>
     </div>
+      <TableOrders />
   </div>
   )
 }

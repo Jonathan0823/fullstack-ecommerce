@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import NavBar from "../components/NavBar";
 import { useSession } from "next-auth/react";
 import { BACKEND_URL } from "@/lib/constant";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 const Page = () => {
   const { data: session } = useSession();
@@ -18,6 +20,8 @@ const Page = () => {
   }
 
   const [carts, setCarts] = useState<CartItem[]>([]);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState(false);
 
   const fetchCart = async () => {
     if (!session) return;
@@ -48,16 +52,56 @@ const Page = () => {
     fetchCart();
   }, [session]);
 
- 
-
-  
-
-
-
   const totalPrice = carts.reduce(
     (total, cart) => total + parseInt(cart.product.price) * cart.quantity,
     0
   );
+
+  const handleOrder = async () => {
+    if (!session) return;
+    try {
+      const res = await fetch(`${BACKEND_URL}/orders/user/${session.user.id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${session?.backendTokens.accessToken}`,
+        },
+        body: JSON.stringify({
+          items: carts.map((cart) => ({
+            productId: cart.productId,
+            quantity: cart.quantity,
+            price: cart.product.price,
+          })),
+          total: totalPrice,
+        }),
+      });
+      if (res.ok) {
+        const res = await fetch(
+          `${BACKEND_URL}/carts/${session.user.id}/items`,
+          {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+              authorization: `Bearer ${session?.backendTokens.accessToken}`,
+            },
+          }
+        );
+        if (res.ok) {
+          setSuccess(true);
+          setCarts([]);
+        } else {
+          setError(true);
+          console.error("Error deleting cart:", res);
+        }
+      } else {
+        setError(true);
+        console.error("Error creating order:", res);
+      }
+    } catch (error) {
+      setError(true);
+      console.error("Error creating order:", error);
+    }
+  };
 
   return (
     <section>
@@ -74,20 +118,23 @@ const Page = () => {
             <ul className="space-y-4">
               {carts.map((cart) => (
                 <li className="flex items-center gap-4" key={cart.productId}>
-                  <img
-                    src={cart.product.image}
-                    alt=""
-                    className="size-16 rounded object-cover"
-                  />
+                  <Link href={`/product/${cart.productId}`}>
+                    <img
+                      src={cart.product.image}
+                      alt=""
+                      className="size-16 rounded object-cover"
+                    />
+                  </Link>
 
                   <div>
                     <h3 className="text-sm text-gray-900 lg:max-w-full max-w-56">
-                      {cart.product.name}
+                      <Link href={`/product/${cart.productId}`}>
+                        {cart.product.name}
+                      </Link>
                     </h3>
 
                     <dl className="mt-0.5 space-y-px text-[10px] text-gray-600">
                       <div>
-                        
                         <dd className="inline">
                           {formatPriceToIDR(parseInt(cart.product.price))}
                         </dd>
@@ -120,8 +167,6 @@ const Page = () => {
                         className="h-8 w-12 rounded border-gray-200 bg-gray-50 p-0 text-center text-xs text-gray-600 [-moz-appearance:_textfield] focus:outline-none [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none"
                       />
                     </form>
-
-                    
                   </div>
                 </li>
               ))}
@@ -130,21 +175,22 @@ const Page = () => {
             <div className="mt-8 flex justify-end border-t border-gray-100 pt-8">
               <div className="w-screen max-w-lg space-y-4">
                 <dl className="space-y-0.5 text-sm text-gray-700">
-                  
-
                   <div className="flex justify-between !text-base font-medium">
                     <dt>Total</dt>
-                    <dd className="font-bold">{formatPriceToIDR(totalPrice)}</dd>
+                    <dd className="font-bold">
+                      {formatPriceToIDR(totalPrice)}
+                      {success && (
+                        <div className="text-green-500 mt-4">Order success</div>
+                      )}
+                      {error && (
+                        <div className="text-red-500 mt-4">Order failed</div>
+                      )}
+                    </dd>
                   </div>
                 </dl>
 
                 <div className="flex justify-end">
-                  <a
-                    href="#"
-                    className="block rounded bg-blue-300 px-5 py-3 text-sm text-gray-700 transition hover:bg-gray-600"
-                  >
-                    Pay
-                  </a>
+                  <Button onClick={handleOrder}>Pay</Button>
                 </div>
               </div>
             </div>

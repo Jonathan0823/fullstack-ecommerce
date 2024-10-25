@@ -62,64 +62,58 @@ export default function Cart() {
 
   const totalItems = carts.length;
 
-  const handleDecrease = async (productId: string, currentQuantity: number) => {
+  const handleQuantityChange = async (productId: string, newQuantity: number) => {
     if (!session) return;
     try {
-      if (currentQuantity == 1) return;
       const res = await fetch(`${BACKEND_URL}/carts/${session.user.id}/items`, {
-        method: "PATCH",
+        method: 'PATCH',
         headers: {
-          "Content-Type": "application/json",
-          authorization: `Bearer ${session?.backendTokens.accessToken}`,
+          'Content-Type': 'application/json',
+          authorization: `Bearer ${session.backendTokens.accessToken}`,
         },
         body: JSON.stringify({
           productId,
-          quantity: currentQuantity - 1,
+          quantity: newQuantity,
         }),
       });
       if (!res.ok) {
-        throw new Error("Error changing cart");
+        throw new Error('Error changing cart');
       }
 
-      fetchCart();
+      // Update the cart state directly to maintain the order
+      setCarts((prevCarts) =>
+        prevCarts.map((cart) =>
+          cart.product.id === productId ? { ...cart, quantity: newQuantity } : cart
+        )
+      );
     } catch (error) {
-      console.error("Error changing cart:", error);
+      console.error('Error changing cart:', error);
     }
   };
 
-  const handleIncrease = async (productId: string, currentQuantity: number) => {
-    if (!session) return;
-    try {
-      const res = await fetch(`${BACKEND_URL}/carts/${session.user.id}/items`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          authorization: `Bearer ${session?.backendTokens.accessToken}`,
-        },
-        body: JSON.stringify({
-          productId,
-          quantity: currentQuantity + 1,
-        }),
-      });
-      if (!res.ok) {
-        throw new Error("Error changing cart");
-      }
-      fetchCart();
-    } catch (error) {
-      console.error("Error changing cart:", error);
+  const handleDecrease = (productId: string, currentQuantity: number) => {
+    if (currentQuantity > 1) {
+      handleQuantityChange(productId, currentQuantity - 1);
     }
+  };
+
+  const handleIncrease = (productId: string, currentQuantity: number) => {
+    handleQuantityChange(productId, currentQuantity + 1);
   };
 
   const handleRemove = async (productId: string) => {
     if (!session) return;
     try {
-      const res = await fetch(`${BACKEND_URL}/carts/${session.user.id}/items/${productId}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          authorization: `Bearer ${session?.backendTokens.accessToken}`,
-        },
-      });
+      const res = await fetch(
+        `${BACKEND_URL}/carts/${session.user.id}/items/${productId}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            authorization: `Bearer ${session?.backendTokens.accessToken}`,
+          },
+        }
+      );
       if (!res.ok) {
         throw new Error("Error deleting cart");
       }
@@ -127,8 +121,7 @@ export default function Cart() {
     } catch (error) {
       console.error("Error deleting cart:", error);
     }
-  }
-    
+  };
 
   return (
     <div>
@@ -192,20 +185,24 @@ export default function Cart() {
                               {carts.map((cart) => (
                                 <li key={cart.product.id} className="flex py-6">
                                   <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
-                                    <img
-                                      alt={cart.product.name}
-                                      src={cart.product.image}
-                                      className="h-full w-full object-cover object-center"
-                                    />
+                                    <Link href={`/product/${cart.productId}`}>
+                                      <img
+                                        alt={cart.product.name}
+                                        src={cart.product.image}
+                                        className="h-full w-full object-cover object-center"
+                                      />
+                                    </Link>
                                   </div>
 
                                   <div className="ml-4 flex flex-1 flex-col">
                                     <div>
                                       <div className="flex justify-between text-base font-medium text-gray-900">
                                         <h3>
-                                          <a href={cart.product.name}>
+                                          <Link
+                                            href={`/product/${cart.productId}`}
+                                          >
                                             {cart.product.name}
-                                          </a>
+                                          </Link>
                                           <p className=" text-sm font-bold">
                                             {formatPriceToIDR(
                                               parseInt(cart.product.price)
@@ -261,7 +258,9 @@ export default function Cart() {
                                           <button
                                             type="button"
                                             className="ml-4 text-sm font-medium text-indigo-600 hover:text-indigo-500"
-                                            onClick={() => handleRemove(cart.productId)}
+                                            onClick={() =>
+                                              handleRemove(cart.productId)
+                                            }
                                           >
                                             Remove
                                           </button>

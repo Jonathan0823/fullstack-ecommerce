@@ -2,35 +2,100 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+Before you begin, ensure you have the following installed on your machine:
+
+- [Node.js](https://nodejs.org/) (version 12.0.0 or later)
+- [npm](https://www.npmjs.com/) (comes with Node.js)
+- [yarn](https://yarnpkg.com/) (optional, if you prefer using yarn)
+- [pnpm](https://pnpm.io/) (optional, if you prefer using pnpm)
+- [bun](https://bun.sh/) (optional, if you prefer using bun)
+
+
+### Installation Backend
+
+
+## 1. Clone the backend repository:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/Jonathan0823/ecommerce-backend.git
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 2. Change your directory to the backend project:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+cd fullstack-ecommerce
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 3. Install the dependencies:
 
-## Learn More
+```bash
+npm install
+# or
+yarn install
+# or
+pnpm install
+```
 
-To learn more about Next.js, take a look at the following resources:
+## 4. Compile and run the project:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+# development
+$ npm run start
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# watch mode
+$ npm run start:dev
 
-## Deploy on Vercel
+# production mode
+$ npm run start:prod
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+the backend will be running on [http://localhost:8000](http://localhost:8000)
+check the [repository](https://github.com/Jonathan0823/ecommerce-backend) for more information 
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+### Installation Frontend
+
+## 1. Clone the frontend repository:
+
+```bash
+git clone https://github.com/Jonathan0823/fullstack-ecommerce.git
+```
+
+## 2. Change your directory to the frontend project:
+
+```bash
+cd fullstack-ecommerce
+```
+
+## 3. Install the dependencies:
+
+```bash
+npm install
+# or
+yarn install
+# or
+pnpm install
+```
+
+## 4. Change the BACKEND_URL in the /app/lib/constants.ts file to you backend url:
+
+```bash
+export const BACKEND_URL = 'http://localhost:8000';
+```
+
+
+## 5. Compile and run the project:
+
+```bash
+# development
+$ npm run dev
+
+# production mode
+$ npm run build
+$ npm run start
+```
+
+the frontend will be running on [http://localhost:3000](http://localhost:3000)
+

@@ -31,6 +31,7 @@ interface SortOption {
 }
 
 interface Product {
+  createdAt: string | number | Date;
   id: string;
   name: string;
   image: string;
@@ -39,8 +40,6 @@ interface Product {
 }
 
 const sortOptions: SortOption[] = [
-  { name: "Most Popular", href: "#", current: true },
-  { name: "Best Rating", href: "#", current: false },
   { name: "Newest", href: "#", current: false },
   { name: "Price: Low to High", href: "#", current: false },
   { name: "Price: High to Low", href: "#", current: false },
@@ -56,6 +55,7 @@ export default function CategoryFilter() {
   const [products, setProducts] = useState<Product[]>([]);
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
+  const [sortOption, setSortOption] = useState<SortOption>(sortOptions[0]);
 
   interface Category {
     id: string;
@@ -76,7 +76,8 @@ export default function CategoryFilter() {
       }
     );
     const data = await response.json();
-    setProducts(data.products);
+    const sortedProducts = sortProducts(data.products, sortOption);
+    setProducts(sortedProducts);
     setTotalPages(data.totalPages);
     setLoading(false);
   };
@@ -114,13 +115,14 @@ export default function CategoryFilter() {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        setProducts(data);
+        const sortedProducts = sortProducts(data, sortOption);
+        setProducts(sortedProducts);
       } catch (error) {
         console.error("Error fetching products by categories:", error);
       }
     };
     getProductbyCategories();
-  }, [selectedCategories]);
+  }, [selectedCategories, sortOption]);
 
   const handleCheckboxChange = (categoryName: string) => {
     setSelectedCategories((prevSelectedCategories) => {
@@ -139,6 +141,28 @@ export default function CategoryFilter() {
 
   const onPageChange = (page: number) => {
     setCurrentPage(page);
+  };
+
+  const sortProducts = (
+    products: Product[],
+    sortOption: SortOption
+  ): Product[] => {
+    switch (sortOption.name) {
+      case "Price: Low to High":
+        return products.sort((a, b) => a.price - b.price);
+      case "Price: High to Low":
+        return products.sort((a, b) => b.price - a.price);
+      case "Newest":
+        return products.sort(
+          (a, b) =>
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
+      default:
+        return products; // Assuming products are already sorted by newest
+    }
+  };
+  const handleSortChange = (option: SortOption) => {
+    setSortOption(option);
   };
 
   return (
@@ -252,17 +276,17 @@ export default function CategoryFilter() {
                     <div className="py-1">
                       {sortOptions.map((option) => (
                         <MenuItem key={option.name}>
-                          <a
-                            href={option.href}
+                          <p
                             className={classNames(
                               option.current
                                 ? "font-medium text-gray-900"
                                 : "text-gray-500",
                               "block px-4 py-2 text-sm data-[focus]:bg-gray-100"
                             )}
+                            onClick={() => handleSortChange(option)}
                           >
                             {option.name}
-                          </a>
+                          </p>
                         </MenuItem>
                       ))}
                     </div>

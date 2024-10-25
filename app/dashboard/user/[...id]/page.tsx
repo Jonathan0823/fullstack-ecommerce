@@ -55,7 +55,12 @@ const page = async () => {
             </div>
           </div>
           <div className="mr-4">
-            {session && <EditProfileDialog user={data} backendtoken={session.backendTokens.accessToken}/>}
+            {session && (
+              <EditProfileDialog
+                user={data}
+                backendtoken={session.backendTokens.accessToken}
+              />
+            )}
           </div>
         </div>
         <PersonalInfoForm />

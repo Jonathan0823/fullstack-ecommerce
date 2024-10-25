@@ -57,9 +57,9 @@ const CategoryForm = ({ refresh, session }: refresh) => {
         }
         setSuccess(true);
         await refresh();
-      } catch (error) {
+      } catch  {
         setError(true);
-        console.log(error);
+       
       }
     }
   };

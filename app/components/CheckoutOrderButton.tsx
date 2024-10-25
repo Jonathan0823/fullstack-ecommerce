@@ -45,10 +45,7 @@ const CheckoutOrderButton = ({ product }: CheckoutOrderButtonProps) => {
     }
   };
 
-  const handleCheckout = async () => {
-    if (!session) return;
-    console.log("Checkout");
-  };
+
 
   return (
     <div className="flex-col gap-4">
@@ -61,12 +58,7 @@ const CheckoutOrderButton = ({ product }: CheckoutOrderButtonProps) => {
         >
           Add to Cart
         </button>
-        <button
-          className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600"
-          onClick={handleCheckout}
-        >
-          Checkout
-        </button>
+        
       </div>
     </div>
   );

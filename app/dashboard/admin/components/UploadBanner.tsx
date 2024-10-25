@@ -50,8 +50,8 @@ const UploadBanner = () => {
   const handleEdit = async (banner: Banner) => {
     if (!session) return;
     try {
-      let imageUrl = banner.image; 
-  
+      let imageUrl = banner.image;
+
       if (file[banner.id]) {
         const resImg = await edgestore.publicFiles.upload({
           file: file[banner.id] as File,
@@ -59,9 +59,9 @@ const UploadBanner = () => {
             setProgress(progress);
           },
         });
-        imageUrl = resImg.url; 
+        imageUrl = resImg.url;
       }
-  
+
       const res = await fetch(`${BACKEND_URL}/banners/edit/${banner.id}`, {
         method: "PATCH",
         headers: {
@@ -73,17 +73,17 @@ const UploadBanner = () => {
           url: link ? link : banner.url,
         }),
       });
-  
+
       if (!res.ok) {
-        throw new Error('Failed to update banner');
+        throw new Error("Failed to update banner");
       }
-  
+
       const updatedBanner = await res.json();
       setBanners((prevBanners) =>
         prevBanners.map((b) => (b.id === updatedBanner.id ? updatedBanner : b))
       );
     } catch (error) {
-      console.error('Error updating banner:', error);
+      console.error("Error updating banner:", error);
     }
   };
 

@@ -73,8 +73,6 @@ export function PopOverProduct({
       return;
     }
 
-    
-
     if (!selectedCategory) {
       setError(true);
       setErrorMessage("Category must be selected");
@@ -142,8 +140,8 @@ export function PopOverProduct({
           await refresh();
         }
       }
-    } catch (error) {
-      console.log(error);
+    } catch  {
+      setError(true);
     }
   };
 

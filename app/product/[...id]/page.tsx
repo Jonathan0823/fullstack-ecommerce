@@ -51,15 +51,13 @@ const Page = async ({ params }: { params: { id: string } }) => {
             </div>
             <div>
               <p className="font-semibold mb-1">Brand</p>
-              <p className="text-gray-700 mb-4 text-sm">
-                {product.brand}
-              </p>
+              <p className="text-gray-700 mb-4 text-sm">{product.brand}</p>
             </div>
             <div>
-                <p className="font-semibold mb-1">Stock</p>
-                <p className="text-gray-700 mb-4 lg:text-base text-sm">
-                    {product.stock}
-                </p>
+              <p className="font-semibold mb-1">Stock</p>
+              <p className="text-gray-700 mb-4 lg:text-base text-sm">
+                {product.stock}
+              </p>
             </div>
           </div>
           <p className="text-xl font-semibold mb-4 lg:mt-14">

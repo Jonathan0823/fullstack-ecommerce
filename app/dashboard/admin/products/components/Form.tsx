@@ -102,8 +102,8 @@ const ProductForm: FC<ProductFormProps> = ({ categories, refresh }) => {
         setDescription("");
         setSelectedCategory(null);
       }
-    } catch (error) {
-      console.log(error);
+    } catch  {
+      setError(true);
     }
   };
 
