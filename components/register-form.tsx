@@ -13,12 +13,15 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
 import { BACKEND_URL } from "@/lib/constant";
+import { CircularProgress } from "@mui/material";
 
 export function RegisterForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState("");
 
   const handleSubmit = async () => {
     if (password !== confirmPassword) {
@@ -26,31 +29,34 @@ export function RegisterForm() {
       return;
     }
     try {
-        const res = await fetch(`${BACKEND_URL}/auth/register`, {
-            method: "POST",
-            body: JSON.stringify({
-              name: name,
-              email: email,
-              password: password,
-            }),
-            headers: {
-              "Content-Type": "application/json",
-            },
-          });
-          if (!res.ok) {
-            console.error("Failed to register");
-            return;
-          } else{
-             await res.json();
-            window.location.href = "/login";
-          }
-    } catch (error) {
-      console.error(error);
+      setSending(true);
+      const res = await fetch(`${BACKEND_URL}/auth/register`, {
+        method: "POST",
+        body: JSON.stringify({
+          name: name,
+          email: email,
+          password: password,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (!res.ok) {
+        setError("Invalid email or password");
+
+        return;
+      } else {
+        await res.json();
+        window.location.href = "/login";
+      }
+    } catch {
+      setError("Invalid email or password");
     } finally {
       setName("");
       setEmail("");
       setPassword("");
       setConfirmPassword("");
+      setSending(false);
     }
   };
 
@@ -89,9 +95,6 @@ export function RegisterForm() {
           <div className="grid gap-2">
             <div className="flex items-center">
               <Label htmlFor="password">Password</Label>
-              <Link href="#" className="ml-auto inline-block text-sm underline">
-                Forgot your password?
-              </Link>
             </div>
             <Input
               id="password"
@@ -111,14 +114,22 @@ export function RegisterForm() {
               value={confirmPassword}
             />
           </div>
+        </div>
+        <div className="mt-4">
+          {error && <p className="text-red-500 text-sm">{error}</p>}
+
           <Button type="submit" className="w-full" onClick={handleSubmit}>
-            Login
+            {sending ? (
+              <CircularProgress size={24} color="inherit" />
+            ) : (
+              "Register"
+            )}
           </Button>
         </div>
         <div className="mt-4 text-center text-sm">
           Already have an account?{" "}
           <Link href="/login" className="underline">
-            Sign In
+            Login
           </Link>
         </div>
       </CardContent>

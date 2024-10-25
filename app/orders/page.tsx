@@ -3,6 +3,7 @@ import NavBar from "../components/NavBar";
 import { BACKEND_URL } from "@/lib/constant";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import { redirect } from "next/navigation";
 
 const Page = async () => {
   interface Order {
@@ -21,7 +22,9 @@ const Page = async () => {
   }
 
   const session = await getServerSession(authOptions);
-  if (!session) return (window.location.href = "/login");
+  if (!session) {
+    redirect("/login");
+  }
   const res = await fetch(`${BACKEND_URL}/orders/user/${session.user.id}`, {
     method: "GET",
     headers: {
@@ -42,7 +45,6 @@ const Page = async () => {
     <div>
       <NavBar />
       <div className="bg-white p-6 shadow-lg gap-5 min-h-dvh">
-       
         <div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
           <div className="mx-auto max-w-3xl">
             <header className="text-center">
