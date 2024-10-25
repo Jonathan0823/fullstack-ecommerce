@@ -13,22 +13,22 @@ Before you begin, ensure you have the following installed on your machine:
 - [bun](https://bun.sh/) (optional, if you prefer using bun)
 
 
-### Installation Backend
+## Installation Backend
 
 
-## 1. Clone the backend repository:
+### 1. Clone the backend repository:
 
 ```bash
 git clone https://github.com/Jonathan0823/ecommerce-backend.git
 ```
 
-## 2. Change your directory to the backend project:
+### 2. Change your directory to the backend project:
 
 ```bash
 cd fullstack-ecommerce
 ```
 
-## 3. Install the dependencies:
+### 3. Install the dependencies:
 
 ```bash
 npm install
@@ -38,7 +38,7 @@ yarn install
 pnpm install
 ```
 
-## 4. Compile and run the project:
+### 4. Compile and run the project:
 
 ```bash
 # development
@@ -55,21 +55,21 @@ the backend will be running on [http://localhost:8000](http://localhost:8000)
 check the [repository](https://github.com/Jonathan0823/ecommerce-backend) for more information 
 
 
-### Installation Frontend
+## Installation Frontend
 
-## 1. Clone the frontend repository:
+### 1. Clone the frontend repository:
 
 ```bash
 git clone https://github.com/Jonathan0823/fullstack-ecommerce.git
 ```
 
-## 2. Change your directory to the frontend project:
+### 2. Change your directory to the frontend project:
 
 ```bash
 cd fullstack-ecommerce
 ```
 
-## 3. Install the dependencies:
+### 3. Install the dependencies:
 
 ```bash
 npm install
@@ -79,14 +79,14 @@ yarn install
 pnpm install
 ```
 
-## 4. Change the BACKEND_URL in the /app/lib/constants.ts file to you backend url:
+### 4. Change the BACKEND_URL in the /app/lib/constants.ts file to you backend url:
 
 ```bash
 export const BACKEND_URL = 'http://localhost:8000';
 ```
 
 
-## 5. Compile and run the project:
+### 5. Compile and run the project:
 
 ```bash
 # development
