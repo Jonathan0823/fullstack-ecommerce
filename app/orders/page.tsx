@@ -65,13 +65,13 @@ const Page = async () => {
                       <dl className="mt-0.5 space-y-px flex lg:flex-row flex-col text-[10px] text-gray-600">
                         <div className="text-base flex">
                           <dt className=" mr-3">Total:</dt>
-                          <dd className=" font-bold">
+                          <dd className=" font-bold w-36">
                             {formatPriceToIDR(order.total)}
                           </dd>
                         </div>
                         <div className="flex text-base">
                           <dt className=" mr-3 lg:ml-10 ml-0">Status:</dt>
-                          <dd className=" font-bold">{order.status}</dd>
+                          <dd className=" font-bold w-24">{order.status}</dd>
                         </div>
                       </dl>
                     </div>
