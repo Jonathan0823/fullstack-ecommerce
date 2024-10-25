@@ -45,7 +45,9 @@ export default function NavBar() {
               {/* Logo */}
               <div className="mr-2 flex lg:ml-0">
                 <a href="/">
-                  <span className="sr-only">Your Company</span>
+                  <span className="sr-only">
+                    Shoppu
+                  </span>
                   <Image
                     alt=""
                     src="/images/logo.png"
@@ -75,13 +77,13 @@ export default function NavBar() {
                 
 
                 {/* Search */}
-                <div className="relative flex lg:ml-6 items-center">
+                <div className="relative flex lg:ml-6 items-center w-full lg:w-auto max-w-40">
                   <Input
                     type="text"
                     onChange={(e) => setSearchQuery(e.target.value)}
                     onKeyDown={handleKeyDown}
                     placeholder="Search"
-                    className="p-2 pl-10 bg-white border rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="2 pl-10 bg-white border rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full"
                   />
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                     <MagnifyingGlassIcon aria-hidden="true" className="h-5 w-5 text-gray-400" />
